@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>B.LADI</title>
+<style>
+:root{--bg:#6B21C8;--bg2:#4A1396;--ink:#2A1058;--card:#FFFFFF;--row:#FFFFFF;--line:#E6DDF5;--hi:#FDB241;--hit:#2A1058;--teal:#27D3C0;--red:#E5195A;--yel:#FFC21A;--bomb:#FF5A5F;--tx:#FFFFFF;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#3B1280;--bg2:#220A52;--card:#F4EEFF;--row:#F4EEFF;--line:#D3C6EE;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#3B1280;--bg2:#220A52;--card:#F4EEFF;--row:#F4EEFF;--line:#D3C6EE;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;color:var(--tx);font-family:"Avenir Next","Trebuchet MS",Verdana,sans-serif;background:radial-gradient(circle at 50% 0,var(--bg) 0,var(--bg2) 100%) fixed}
+main{max-width:480px;margin:0 auto;padding:22px 18px 40px}
+h1,h2{margin:0;font-family:"Arial Rounded MT Bold","Trebuchet MS",sans-serif;font-weight:900}
+h1{font-size:3.4rem;line-height:1;text-align:center}
+h1 b{color:var(--yel)}
+h2{font-size:1.6rem;margin-bottom:10px}
+p{margin:.5rem 0;line-height:1.45}
+.c{text-align:center}
+.btn{display:block;width:100%;border:0;border-radius:40px;padding:.95rem 1rem;margin:12px 0;font:inherit;font-size:1.25rem;font-weight:900;letter-spacing:.02em;cursor:pointer;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.btn.red{background:var(--red)}.btn.teal{background:var(--teal);color:#06302B}.btn.yel{background:var(--yel);color:#3A2A00}
+.btn.sm{font-size:1rem;padding:.7rem}
+button:focus-visible,input:focus-visible,.row:focus-visible{outline:4px solid #fff;outline-offset:2px}
+.card{background:var(--card);color:var(--ink);border-radius:18px;padding:16px;margin:14px 0}
+.q{font-weight:900;text-transform:uppercase;font-size:1.15rem;text-align:center;margin:0}
+.bar{height:12px;background:var(--line);border-radius:10px;margin:12px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;background:var(--hi);transition:width 1s linear}
+.tm{font-weight:900;font-size:1.3rem;color:var(--ink)}
+.list{background:var(--card);border-radius:14px;overflow:hidden;margin:12px 0}
+.row{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;border-bottom:1px solid var(--line);background:var(--row);color:var(--ink);font:inherit;font-weight:800;text-transform:uppercase;padding:.8rem 1rem;cursor:pointer;text-align:left;font-size:1rem}
+.row:last-child{border-bottom:0}
+.row[aria-pressed="true"]{background:var(--hi)}
+.row[aria-pressed="true"].neg{background:var(--bomb);color:#fff}
+.row .p{font-weight:900;min-width:2rem;text-align:right}
+.sc{display:flex;justify-content:space-between;font-weight:800}
+.tog{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--line);font-weight:800}
+.tog input{width:44px;height:24px;accent-color:var(--teal)}
+input.t{width:100%;font:inherit;font-size:1.1rem;padding:.8rem 1rem;border-radius:12px;border:3px solid var(--line);margin:6px 0 12px;color:var(--ink);background:#fff}
+select.t{width:100%;font:inherit;font-size:1.1rem;padding:.8rem 1rem;border-radius:12px;border:3px solid var(--line);margin:6px 0 12px;color:var(--ink);background:#fff}
+.row.ok{background:#0E8A4F;color:#fff;cursor:default}.row.ko{background:#C62828;color:#fff;cursor:default}.row.nt{opacity:.6;cursor:default}
+table{width:100%;border-collapse:collapse;font-weight:700}td,th{padding:.45rem .3rem;border-bottom:1px solid var(--line);text-align:center}th:first-child,td:first-child{text-align:left}tr.tot td{font-weight:900;border-bottom:0}
+.big{font-size:2.6rem;font-weight:900;color:var(--red);text-align:center}
+.lg{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:22px 0 10px}.lg button{border:2px solid #fff;background:transparent;color:#fff;font:inherit;font-weight:800;border-radius:20px;padding:.45rem .9rem;cursor:pointer}.lg button.on{background:#fff;color:var(--ink)}
+html[dir="rtl"] .row,html[dir="rtl"] th:first-child,html[dir="rtl"] td:first-child{text-align:right}
+.jks{display:flex;gap:10px;justify-content:center;margin:14px 0}.jks button{width:76px;height:76px;border-radius:18px;border:3px solid transparent;background:#fff;color:var(--red);font:inherit;font-size:2rem;font-weight:900;cursor:pointer}.jks button[aria-pressed="true"]{background:var(--hi);color:#fff;border-color:#fff}.jks button:disabled{opacity:.35;cursor:not-allowed}
+.pb{margin:14px 0}.pb .t{display:flex;justify-content:space-between;font-weight:900}.pb .b{height:18px;background:var(--line);border-radius:10px;overflow:hidden;margin-top:5px}.pb .b i{display:block;height:100%;background:var(--hi);border-radius:10px;transition:width .6s}.trophy{font-size:5rem;text-align:center;line-height:1}
+.logo-wrap{display:inline-block;background:var(--red);border-radius:30px;padding:12px 28px 14px;box-shadow:0 5px 0 rgba(0,0,0,.25)}.logo{display:flex;align-items:baseline;justify-content:center;gap:3px;margin:0}.logo .B{font-size:5.6rem;line-height:1;color:var(--yel)}.logo .r{font-size:1.5rem;letter-spacing:.14em;color:#fff}
+.miss{opacity:.75;font-size:.95rem}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var CATS={"Géographie":1,"Sport":1,"Football":1,"Divertissement":1,"Gastronomie":1,"Histoire":1,"Science":1,"Religion":1,"Égypte":1,"Musique":1,"Tech":1,"Spécialités":1,"Culture générale":1,"Mèmes":1};
+var DATA=[
+["Géographie","Citez 9 pays qui commencent par la lettre « M »","Maroc:1,Mexique:1,Madagascar:2,Mali:2,Malaisie:2,Mongolie:2,Malte:5,Maldives:5,Mozambique:5,Namibie:-5"],
+["Géographie","Citez 9 pays d’Amérique du Sud","Brésil:1,Argentine:1,Chili:1,Colombie:2,Pérou:2,Équateur:2,Bolivie:5,Paraguay:5,Uruguay:2,Mexique:-5"],
+["Sport","Citez 9 sports des Jeux olympiques d’été","Natation:1,Athlétisme:1,Judo:1,Escrime:2,Aviron:2,Tir à l’arc:2,Haltérophilie:2,Triathlon:5,Pentathlon moderne:5,Ski alpin:-5"],
+["Sport","Citez 9 villes qui ont accueilli les Jeux olympiques d’été","Paris:1,Londres:1,Tokyo:1,Athènes:1,Los Angeles:1,Rio de Janeiro:2,Pékin:2,Sydney:2,Barcelone:2,Madrid:-5"],
+["Divertissement","Citez 9 films d’animation Pixar","Toy Story:1,Le Monde de Nemo:1,Les Indestructibles:1,Ratatouille:2,WALL-E:2,Là-haut:2,Vice-versa:2,Coco:2,Rebelle:5,Shrek:-5"],
+["Divertissement","Citez 9 super-héros de l’univers Marvel","Spider-Man:1,Iron Man:1,Hulk:1,Thor:1,Captain America:1,Black Widow:2,Black Panther:2,Doctor Strange:2,Ant-Man:5,Batman:-5"],
+["Gastronomie","Citez 9 fromages français","Camembert:1,Brie:1,Roquefort:1,Comté:1,Reblochon:2,Munster:2,Cantal:2,Maroilles:5,Époisses:5,Gouda:-5"],
+["Gastronomie","Citez 9 herbes aromatiques","Basilic:1,Thym:1,Persil:1,Romarin:1,Menthe:1,Ciboulette:2,Estragon:2,Coriandre:2,Aneth:5,Poivre:-5"],
+["Géographie","Citez 9 pays d’Afrique","Égypte:1,Maroc:1,Algérie:1,Sénégal:1,Kenya:2,Éthiopie:2,Ghana:2,Namibie:5,Botswana:5,Yémen:-5"],
+["Géographie","Citez 9 fleuves ou rivières de France","Seine:1,Loire:1,Rhône:1,Garonne:1,Dordogne:2,Marne:2,Saône:2,Charente:5,Allier:5,Danube:-5"],
+["Géographie","Citez 9 pays d’Asie","Chine:1,Japon:1,Inde:1,Thaïlande:1,Vietnam:2,Corée du Sud:2,Indonésie:2,Népal:5,Laos:5,Pérou:-5"],
+["Géographie","Citez 9 pays membres de l’Union européenne","France:1,Allemagne:1,Espagne:1,Italie:1,Pologne:2,Portugal:2,Grèce:2,Suède:5,Estonie:5,Suisse:-5"],
+["Géographie","Citez 9 régions de France métropolitaine","Bretagne:1,Normandie:1,Occitanie:1,Corse:1,Hauts-de-France:2,Pays de la Loire:2,Bourgogne-Franche-Comté:2,Centre-Val de Loire:5,Nouvelle-Aquitaine:5,Lombardie:-5"],
+["Géographie","Citez 9 États américains","Californie:1,Texas:1,Floride:1,New York:1,Alaska:2,Hawaï:2,Nevada:2,Vermont:5,Wyoming:5,Ontario:-5"],
+["Sport","Citez 9 sports d’hiver","Ski alpin:1,Snowboard:1,Patinage artistique:1,Hockey sur glace:1,Curling:2,Luge:2,Bobsleigh:2,Biathlon:2,Combiné nordique:5,Aviron:-5"],
+["Sport","Citez 9 champions du monde de Formule 1","Schumacher:1,Hamilton:1,Senna:1,Prost:1,Vettel:2,Verstappen:2,Alonso:2,Räikkönen:5,Häkkinen:5,Massa:-5"],
+["Football","Citez 9 clubs de football espagnols","Real Madrid:1,FC Barcelone:1,Atlético de Madrid:1,FC Séville:2,FC Valence:2,Villarreal:2,Athletic Bilbao:2,Real Sociedad:5,Celta Vigo:5,Juventus:-5"],
+["Football","Citez 9 pays qui ont organisé une Coupe du monde de football","France:1,Brésil:1,Allemagne:1,Italie:1,Mexique:2,Argentine:2,Espagne:2,Suède:5,Chili:5,Portugal:-5"],
+["Football","Citez 9 joueurs qui ont remporté le Ballon d’or","Messi:1,Cristiano Ronaldo:1,Zidane:1,Benzema:2,Ronaldinho:2,Kaká:2,Modrić:2,Platini:5,Cruyff:5,Neymar:-5"],
+["Football","Citez 9 clubs anglais de Premier League","Arsenal:1,Chelsea:1,Liverpool:1,Manchester United:1,Manchester City:1,Tottenham:2,Everton:2,Newcastle:2,Aston Villa:2,Celtic:-5"],
+["Football","Citez 9 pays vainqueurs du Championnat d’Europe de football","Espagne:1,Allemagne:1,France:1,Italie:1,Portugal:1,Pays-Bas:2,Danemark:2,Grèce:2,Tchécoslovaquie:5,Angleterre:-5"],
+["Divertissement","Citez 9 personnages de Harry Potter","Harry Potter:1,Hermione:1,Ron Weasley:1,Dumbledore:1,Voldemort:1,Hagrid:2,Rogue:2,Drago Malefoy:2,Neville Londubat:5,Gandalf:-5"],
+["Divertissement","Citez 9 princesses Disney","Cendrillon:1,Blanche-Neige:1,Belle:1,Ariel:1,Jasmine:2,Mulan:2,Raiponce:2,Tiana:5,Pocahontas:5,Fiona:-5"],
+["Divertissement","Citez 9 chanteurs ou chanteuses français","Édith Piaf:1,Johnny Hallyday:1,Charles Aznavour:1,Serge Gainsbourg:2,Françoise Hardy:2,Michel Sardou:2,Mylène Farmer:2,Zaz:5,Julien Doré:5,Céline Dion:-5"],
+["Divertissement","Citez 9 séries Netflix","Stranger Things:1,La Casa de Papel:1,The Crown:1,Squid Game:1,Lupin:2,Wednesday:2,Narcos:2,Bridgerton:2,Dark:5,Game of Thrones:-5"],
+["Divertissement","Citez 9 séries de jeux Nintendo","Mario Kart:1,Zelda:1,Pokémon:1,Animal Crossing:1,Super Smash Bros.:2,Splatoon:2,Kirby:2,Metroid:5,Pikmin:5,Fortnite:-5"],
+["Divertissement","Citez 9 acteurs ou actrices français","Jean Dujardin:1,Omar Sy:1,Marion Cotillard:1,Catherine Deneuve:1,Gérard Depardieu:2,Audrey Tautou:2,Vincent Cassel:2,Léa Seydoux:2,Louis de Funès:5,Penélope Cruz:-5"],
+["Divertissement","Citez 9 films de Christopher Nolan","Inception:1,Interstellar:1,The Dark Knight:1,Oppenheimer:1,Memento:2,Dunkerque:2,Le Prestige:2,Batman Begins:2,Tenet:2,Gravity:-5"],
+["Gastronomie","Citez 9 pâtisseries françaises","Éclair:1,Macaron:1,Mille-feuille:1,Paris-Brest:2,Religieuse:2,Tarte Tatin:2,Saint-Honoré:2,Opéra:5,Financier:5,Tiramisu:-5"],
+["Gastronomie","Citez 9 légumes","Carotte:1,Poireau:1,Courgette:1,Aubergine:1,Brocoli:1,Chou:2,Radis:2,Navet:2,Panais:5,Banane:-5"],
+["Gastronomie","Citez 9 plats italiens","Pizza:1,Lasagnes:1,Risotto:1,Carbonara:1,Ravioli:2,Gnocchi:2,Tiramisu:2,Osso buco:5,Saltimbocca:5,Paella:-5"],
+["Gastronomie","Citez 9 fruits à noyau","Cerise:1,Pêche:1,Abricot:1,Prune:1,Nectarine:2,Mirabelle:2,Datte:2,Olive:5,Mangue:5,Fraise:-5"],
+["Histoire","Citez 9 rois de France","Louis XIV:1,Louis XVI:1,François Ier:1,Henri IV:1,Philippe le Bel:2,Saint Louis:2,Louis XI:2,Charles V:5,Hugues Capet:5,Napoléon Ier:-5"],
+["Histoire","Citez 9 pays qui faisaient partie de l’URSS","Russie:1,Ukraine:1,Biélorussie:2,Kazakhstan:2,Géorgie:2,Arménie:2,Lituanie:2,Ouzbékistan:5,Tadjikistan:5,Pologne:-5"],
+["Histoire","Citez 9 peuples de l’Antiquité","Romains:1,Grecs:1,Égyptiens:1,Gaulois:1,Perses:2,Phéniciens:2,Carthaginois:2,Sumériens:5,Hittites:5,Vikings:-5"],
+["Histoire","Citez 9 explorateurs ou voyageurs célèbres","Christophe Colomb:1,Magellan:1,Marco Polo:1,Vasco de Gama:2,Jacques Cartier:2,Amundsen:2,James Cook:2,Champlain:5,Livingstone:5,Galilée:-5"],
+["Histoire","Citez 9 monuments de Paris","Tour Eiffel:1,Arc de Triomphe:1,Notre-Dame:1,Sacré-Cœur:1,Louvre:2,Panthéon:2,Opéra Garnier:2,Sainte-Chapelle:5,Les Invalides:5,Big Ben:-5"],
+["Science","Citez 9 astres du système solaire","Soleil:1,Lune:1,Mars:1,Jupiter:1,Saturne:1,Neptune:2,Pluton:2,Titan:5,Io:5,Sirius:-5"],
+["Science","Citez 9 éléments chimiques","Oxygène:1,Hydrogène:1,Carbone:1,Fer:1,Or:1,Azote:2,Hélium:2,Sodium:2,Zinc:5,Eau:-5"],
+["Science","Citez 9 os du corps humain","Fémur:1,Tibia:1,Crâne:1,Humérus:2,Clavicule:2,Radius:2,Omoplate:2,Cubitus:5,Sternum:5,Biceps:-5"],
+["Science","Citez 9 animaux marins","Requin:1,Dauphin:1,Baleine:1,Pieuvre:1,Orque:1,Méduse:2,Hippocampe:2,Raie:2,Murène:5,Hippopotame:-5"],
+["Science","Citez 9 grands scientifiques","Einstein:1,Newton:1,Marie Curie:1,Pasteur:1,Galilée:2,Darwin:2,Tesla:2,Edison:2,Archimède:5,Mozart:-5"],
+["Science","Citez 9 animaux d’Afrique","Lion:1,Éléphant:1,Girafe:1,Zèbre:1,Hippopotame:2,Guépard:2,Gnou:2,Hyène:2,Okapi:5,Kangourou:-5"],
+["Géographie","Citez 9 pays qui utilisent l’euro","France:1,Allemagne:1,Italie:1,Espagne:1,Irlande:2,Finlande:2,Autriche:2,Slovénie:5,Malte:5,Suède:-5"],
+["Géographie","Citez 9 capitales d’Afrique","Le Caire:1,Rabat:1,Alger:1,Dakar:1,Nairobi:2,Addis-Abeba:2,Accra:2,Windhoek:5,Lusaka:5,Bagdad:-5"],
+["Géographie","Citez 9 îles ou archipels français","Corse:1,Martinique:1,Guadeloupe:1,La Réunion:1,Mayotte:2,Tahiti:2,Nouvelle-Calédonie:2,Belle-Île:5,Île de Ré:5,Sardaigne:-5"],
+["Géographie","Citez 9 pays qui ont une frontière avec la France","Belgique:1,Allemagne:1,Suisse:1,Italie:1,Espagne:1,Luxembourg:2,Monaco:2,Andorre:2,Brésil:5,Autriche:-5"],
+["Géographie","Citez 9 grandes villes de France","Paris:1,Marseille:1,Lyon:1,Toulouse:1,Nice:1,Nantes:2,Strasbourg:2,Bordeaux:2,Lille:2,Lausanne:-5"],
+["Géographie","Citez 9 pays d’Océanie","Australie:1,Nouvelle-Zélande:1,Fidji:2,Papouasie-Nouvelle-Guinée:2,Samoa:5,Tonga:5,Vanuatu:5,Tuvalu:5,Nauru:5,Mongolie:-5"],
+["Géographie","Citez 9 chaînes de montagnes","Alpes:1,Pyrénées:1,Himalaya:1,Andes:1,Rocheuses:1,Vosges:2,Jura:2,Atlas:2,Oural:5,Sahara:-5"],
+["Sport","Citez 9 joueurs qui ont gagné Roland-Garros","Nadal:1,Djokovic:1,Federer:1,Alcaraz:1,Borg:2,Agassi:2,Noah:2,Wawrinka:5,Wilander:5,Murray:-5"],
+["Sport","Citez 9 sports de combat","Boxe:1,Judo:1,Karaté:1,Taekwondo:1,Lutte:2,MMA:2,Kung-fu:2,Aïkido:5,Savate:5,Badminton:-5"],
+["Sport","Citez 9 disciplines de l’athlétisme","100 mètres:1,Marathon:1,Saut en longueur:1,Saut à la perche:1,Lancer du javelot:2,Lancer du poids:2,Triple saut:2,Décathlon:2,Steeple:5,Water-polo:-5"],
+["Sport","Citez 9 sports nautiques","Natation:1,Voile:1,Surf:1,Aviron:1,Kayak:2,Plongeon:2,Water-polo:2,Planche à voile:2,Natation artistique:5,Escalade:-5"],
+["Sport","Citez 9 vainqueurs du Tour de France","Eddy Merckx:1,Bernard Hinault:1,Miguel Indurain:1,Tadej Pogacar:1,Jonas Vingegaard:2,Greg LeMond:2,Laurent Fignon:2,Bradley Wiggins:5,Marco Pantani:5,Peter Sagan:-5"],
+["Sport","Citez 9 sports d’équipe","Football:1,Rugby:1,Basket:1,Handball:1,Volley:1,Hockey:2,Water-polo:2,Baseball:2,Cricket:2,Tennis:-5"],
+["Sport","Citez 9 sports de raquette","Tennis:1,Badminton:1,Squash:1,Tennis de table:1,Padel:2,Pelote basque:2,Racquetball:5,Pickleball:5,Jeu de paume:5,Golf:-5"],
+["Football","Citez 9 stades de football célèbres","Camp Nou:1,Santiago-Bernabéu:1,Wembley:1,Maracanã:1,Parc des Princes:1,San Siro:2,Allianz Arena:2,Old Trafford:2,Stade Vélodrome:2,Roland-Garros:-5"],
+["Football","Citez 9 clubs de football italiens","Juventus:1,AC Milan:1,Inter Milan:1,AS Rome:1,Naples:2,Lazio:2,Fiorentina:2,Atalanta:2,Torino:5,Benfica:-5"],
+["Football","Citez 9 clubs de football allemands","Bayern Munich:1,Borussia Dortmund:1,Bayer Leverkusen:2,RB Leipzig:2,Schalke 04:2,Eintracht Francfort:2,Wolfsburg:2,Hambourg:5,Werder Brême:5,Ajax:-5"],
+["Football","Citez 9 clubs de football français","PSG:1,Marseille:1,Lyon:1,Monaco:1,Lille:2,Nice:2,Rennes:2,Lens:2,Nantes:5,Anderlecht:-5"],
+["Football","Citez 9 joueurs de l’équipe de France championne du monde 1998","Zidane:1,Deschamps:1,Thuram:1,Barthez:1,Petit:2,Djorkaeff:2,Henry:2,Desailly:2,Lizarazu:5,Cantona:-5"],
+["Football","Citez 9 entraîneurs de football célèbres","Guardiola:1,Mourinho:1,Ancelotti:1,Ferguson:1,Wenger:1,Klopp:2,Zidane:2,Deschamps:2,Conte:5,Pelé:-5"],
+["Football","Citez 9 gardiens de but célèbres","Buffon:1,Neuer:1,Casillas:1,Courtois:2,Barthez:2,Lloris:2,Schmeichel:2,Yachine:5,Zoff:5,Maldini:-5"],
+["Divertissement","Citez 9 films Disney","Le Roi lion:1,La Reine des neiges:1,Aladdin:1,La Belle et la Bête:1,Bambi:2,Mulan:2,Pinocchio:2,Dumbo:2,Tarzan:5,Kung Fu Panda:-5"],
+["Divertissement","Citez 9 personnages du Seigneur des anneaux","Frodon:1,Gandalf:1,Aragorn:1,Legolas:1,Gollum:1,Gimli:2,Sam:2,Saroumane:2,Boromir:5,Dumbledore:-5"],
+["Divertissement","Citez 9 groupes de rock","Queen:1,The Beatles:1,AC/DC:1,Led Zeppelin:1,The Rolling Stones:1,Metallica:2,Nirvana:2,Pink Floyd:2,Muse:5,ABBA:-5"],
+["Divertissement","Citez 9 chanteuses internationales","Beyoncé:1,Rihanna:1,Madonna:1,Adele:1,Taylor Swift:1,Shakira:2,Lady Gaga:2,Dua Lipa:2,Billie Eilish:5,Eminem:-5"],
+["Divertissement","Citez 9 jeux de société","Monopoly:1,Cluedo:1,Scrabble:1,Risk:2,Catan:2,Dixit:2,Trivial Pursuit:2,Puissance 4:1,Carcassonne:5,Tetris:-5"],
+["Divertissement","Citez 9 émissions de télé françaises","Questions pour un champion:1,Koh-Lanta:1,Fort Boyard:1,Des chiffres et des lettres:2,Star Academy:2,The Voice:2,N’oubliez pas les paroles:2,Intervilles:5,Le Juste Prix:5,Jeopardy:-5"],
+["Divertissement","Citez 9 super-héros de l’univers DC","Batman:1,Superman:1,Wonder Woman:1,Flash:1,Aquaman:2,Green Lantern:2,Robin:2,Shazam:5,Cyborg:5,Spider-Man:-5"],
+["Gastronomie","Citez 9 plats français","Pot-au-feu:1,Ratatouille:1,Cassoulet:1,Blanquette de veau:1,Coq au vin:1,Quiche lorraine:1,Bouillabaisse:2,Choucroute:2,Tartiflette:2,Sushi:-5"],
+["Gastronomie","Citez 9 fruits exotiques","Banane:1,Ananas:1,Mangue:1,Kiwi:1,Papaye:2,Fruit de la passion:2,Litchi:2,Goyave:5,Fruit du dragon:5,Pomme:-5"],
+["Gastronomie","Citez 9 cocktails","Mojito:1,Margarita:1,Piña colada:1,Spritz:1,Cosmopolitan:2,Daiquiri:2,Caïpirinha:2,Moscow mule:5,Negroni:5,Whisky:-5"],
+["Gastronomie","Citez 9 sauces ou condiments","Moutarde:1,Ketchup:1,Mayonnaise:1,Tabasco:2,Wasabi:2,Harissa:2,Sauce soja:2,Aïoli:5,Pesto:5,Farine:-5"],
+["Gastronomie","Citez 9 formats de pâtes","Spaghetti:1,Tagliatelles:1,Penne:1,Fusilli:1,Farfalle:2,Rigatoni:2,Linguine:2,Orecchiette:5,Conchiglie:5,Riz:-5"],
+["Gastronomie","Citez 9 charcuteries ou viandes transformées","Jambon:1,Saucisson:1,Rillettes:1,Pâté:1,Chorizo:2,Bacon:2,Mortadelle:2,Andouille:5,Boudin:5,Tofu:-5"],
+["Gastronomie","Citez 9 plats asiatiques","Sushi:1,Pad thaï:1,Ramen:1,Nems:1,Bibimbap:2,Dim sum:2,Curry:2,Tempura:2,Phở:5,Couscous:-5"],
+["Histoire","Citez 9 batailles célèbres","Waterloo:1,Verdun:1,Austerlitz:1,Stalingrad:1,Marignan:2,Azincourt:2,Hastings:2,Trafalgar:2,Valmy:5,Pompéi:-5"],
+["Histoire","Citez 9 présidents des États-Unis","Washington:1,Lincoln:1,Kennedy:1,Obama:1,Reagan:2,Jefferson:2,Eisenhower:2,Nixon:2,Truman:5,Churchill:-5"],
+["Histoire","Citez 9 personnages de la Révolution française","Robespierre:1,Danton:1,Marat:1,Louis XVI:1,Marie-Antoinette:1,La Fayette:2,Saint-Just:2,Mirabeau:2,Camille Desmoulins:5,Richelieu:-5"],
+["Histoire","Citez 9 dieux grecs","Zeus:1,Athéna:1,Apollon:1,Poséidon:1,Aphrodite:1,Arès:2,Hermès:2,Héra:2,Hadès:2,Jupiter:-5"],
+["Histoire","Citez 9 empires","Empire romain:1,Empire ottoman:1,Empire britannique:1,Empire byzantin:2,Empire mongol:2,Empire perse:2,Empire aztlèque:2,Empire inca:2,Empire carolingien:5,République de Venise:-5"],
+["Histoire","Citez 9 femmes célèbres de l’Histoire","Jeanne d’Arc:1,Marie Curie:1,Cléopâtre:1,Simone Veil:1,Rosa Parks:2,Catherine de Médicis:2,Olympe de Gouges:2,Élisabeth Ire:2,Frida Kahlo:5,Léonard de Vinci:-5"],
+["Histoire","Citez 9 pays qui ont été des colonies françaises","Algérie:1,Maroc:1,Tunisie:1,Sénégal:1,Madagascar:2,Vietnam:2,Côte d’Ivoire:2,Laos:5,Mali:5,Libye:-5"],
+["Science","Citez 9 organes du corps humain","Cœur:1,Poumons:1,Foie:1,Cerveau:1,Reins:1,Estomac:2,Intestin:2,Rate:5,Pancréas:5,Fémur:-5"],
+["Science","Citez 9 unités de mesure","Mètre:1,Kilogramme:1,Seconde:1,Litre:1,Watt:2,Volt:2,Joule:2,Pascal:5,Kelvin:5,Voltmètre:-5"],
+["Science","Citez 9 inventions du XXe siècle","Avion:1,Télévision:1,Pénicilline:1,Ordinateur:1,Laser:2,Radar:2,Four à micro-ondes:2,Hélicoptère:2,Satellite artificiel:5,Imprimerie:-5"],
+["Science","Citez 9 animaux d’Asie","Tigre:1,Panda:1,Éléphant d’Asie:1,Orang-outan:2,Tapir:2,Panthère des neiges:2,Dragon de Komodo:2,Yack:5,Gibbon:5,Girafe:-5"],
+["Science","Citez 9 oiseaux","Aigle:1,Hibou:1,Pigeon:1,Perroquet:1,Cygne:2,Autruche:2,Flamant rose:2,Manchot:2,Colibri:5,Chauve-souris:-5"],
+["Science","Citez 9 langages de programmation","Python:1,Java:1,JavaScript:1,C++:2,PHP:2,Ruby:2,Swift:2,Rust:5,Kotlin:5,HTML:-5"],
+["Science","Citez 9 dinosaures","Tyrannosaure:1,Vélociraptor:1,Tricératops:1,Diplodocus:1,Stégosaure:1,Brachiosaure:2,Spinosaure:2,Ankylosaure:2,Iguanodon:5,Mammouth:-5"],
+["Religion","Citez 9 apôtres de Jésus","Pierre:1,Jean:1,Jacques:1,Matthieu:1,Thomas:1,Judas Iscariote:1,André:2,Philippe:2,Barthélemy:5,Paul:-5"],
+["Religion","Citez 9 miracles ou actes de Jésus","Marche sur l’eau:1,Multiplication des pains:1,Noces de Cana:1,Résurrection de Lazare:1,Guérison d’un aveugle:2,Apaisement de la tempête:2,Guérison d’un paralytique:2,Pêche miraculeuse:5,Cène:5,Traversée de la mer Rouge:-5"],
+["Religion","Citez 9 livres de la Bible","Genèse:1,Exode:1,Psaumes:1,Matthieu:1,Jean:1,Apocalypse:1,Proverbes:2,Isaïe:2,Lévitique:5,Coran:-5"],
+["Religion","Citez 9 personnages de l’Ancien Testament","Adam:1,Ève:1,Noé:1,Abraham:1,Moïse:1,David:1,Salomon:2,Daniel:2,Joseph:2,Pierre:-5"],
+["Religion","Citez 9 moments clés de la Bible","Création du monde:1,Déluge:1,Traversée de la mer Rouge:1,Dix commandements:1,Naissance de Jésus:1,Crucifixion:1,Résurrection:1,Tour de Babel:2,Dix plaies d’Égypte:2,Hégire:-5"],
+["Égypte","Citez 9 pharaons ou reines d’Égypte","Toutânkhamon:1,Ramsès II:1,Cléopâtre:1,Khéops:1,Néfertiti:2,Hatchepsout:2,Akhenaton:2,Djéser:5,Thoutmosis III:5,Jules César:-5"],
+["Égypte","Citez 9 dieux de l’Égypte antique","Rê:1,Anubis:1,Osiris:1,Isis:1,Horus:1,Seth:2,Thot:2,Bastet:2,Hathor:2,Zeus:-5"],
+["Égypte","Citez 9 sites ou monuments d’Égypte","Pyramides de Gizeh:1,Sphinx:1,Vallée des Rois:1,Louxor:1,Karnak:2,Abou Simbel:2,Assouan:2,Philae:5,Saqqarah:5,Pétra:-5"],
+["Égypte","Citez 9 villes d’Égypte","Le Caire:1,Alexandrie:1,Louxor:1,Assouan:1,Gizeh:1,Charm el-Cheikh:2,Hurghada:2,Port-Saïd:2,Suez:2,Casablanca:-5"],
+["Musique","Citez 9 instruments à cordes","Guitare:1,Violon:1,Violoncelle:1,Harpe:1,Contrebasse:2,Banjo:2,Ukulélé:2,Mandoline:2,Sitar:5,Trompette:-5"],
+["Musique","Citez 9 rappeurs ou rappeuses","Eminem:1,Jay-Z:1,Drake:1,Kendrick Lamar:1,Nicki Minaj:2,Snoop Dogg:2,Booba:2,Nekfeu:2,Orelsan:5,Ed Sheeran:-5"],
+["Musique","Citez 9 artistes ou groupes des années 80","Michael Jackson:1,Madonna:1,Prince:1,Queen:1,Depeche Mode:2,A-ha:2,Duran Duran:2,Cyndi Lauper:2,Culture Club:5,Billie Eilish:-5"],
+["Musique","Citez 9 festivals de musique","Coachella:1,Tomorrowland:1,Glastonbury:1,Rock en Seine:1,Les Vieilles Charrues:2,Hellfest:2,Lollapalooza:2,Eurockéennes:5,Solidays:5,Festival de Cannes:-5"],
+["Tech","Citez 9 entreprises technologiques","Apple:1,Google:1,Microsoft:1,Amazon:1,Samsung:1,Meta:2,Tesla:2,Nvidia:2,Intel:5,Renault:-5"],
+["Tech","Citez 9 marques de téléphones","Apple:1,Samsung:1,Xiaomi:1,Huawei:1,Google Pixel:2,Nokia:2,Oppo:2,Motorola:2,OnePlus:5,Canon:-5"],
+["Tech","Citez 9 consoles de jeux vidéo","PlayStation 5:1,Xbox Series X:1,Nintendo Switch:1,Wii:1,PlayStation 2:1,Game Boy:2,Mega Drive:2,Super Nintendo:2,Atari 2600:5,iPad:-5"],
+["Tech","Citez 9 sites ou services en ligne","Google:1,YouTube:1,Wikipédia:1,Amazon:1,Netflix:1,Spotify:2,Airbnb:2,Uber:2,Dropbox:5,Carrefour:-5"],
+["Spécialités","Citez 9 ingrédients de la cuisine japonaise","Riz:1,Sauce soja:1,Wasabi:1,Algue nori:1,Miso:2,Tofu:2,Gingembre:2,Mirin:5,Dashi:5,Beurre:-5"],
+["Spécialités","Citez 9 spécialités espagnoles","Paella:1,Tortilla:1,Gaspacho:1,Churros:1,Jambon ibérique:2,Patatas bravas:2,Croquetas:2,Crema catalana:5,Poulpe à la galicienne:5,Moussaka:-5"],
+["Spécialités","Citez 9 ingrédients de la cuisine mexicaine","Maïs:1,Haricots:1,Piment:1,Avocat:1,Tomate:1,Coriandre:2,Citron vert:2,Cacao:5,Nopal:5,Curry:-5"],
+["Spécialités","Citez 9 plats du Moyen-Orient","Houmous:1,Taboulé:1,Falafel:1,Shawarma:1,Kebbé:2,Baba ganoush:2,Manakish:2,Fattouch:5,Labneh:5,Pierogi:-5"],
+["Culture générale","Citez 9 choses qu’on trouve dans une trousse","Stylo:1,Crayon:1,Gomme:1,Règle:1,Taille-crayon:1,Ciseaux:2,Colle:2,Compas:2,Surligneur:2,Marteau:-5"],
+["Culture générale","Citez 9 choses qui vont par paire","Chaussettes:1,Gants:1,Chaussures:1,Lunettes:1,Boucles d’oreilles:1,Jumelles:2,Ciseaux:2,Baguettes:2,Skis:5,Chapeau:-5"],
+["Culture générale","Citez 9 choses qui sont rondes","Ballon:1,Pizza:1,Roue:1,Lune:1,Pièce de monnaie:1,Horloge:2,Assiette:2,Bouton:2,CD:5,Dé à jouer:-5"],
+["Culture générale","Citez 9 choses qu’on trouve dans une salle de bain","Savon:1,Brosse à dents:1,Dentifrice:1,Serviette:1,Shampoing:1,Douche:2,Baignoire:2,Miroir:2,Rasoir:2,Four:-5"],
+["Mèmes","Citez 9 mèmes célèbres d’Internet","Doge:1,Rickroll:1,Grumpy Cat:1,Pepe la grenouille:2,Nyan Cat:2,Distracted Boyfriend:2,Trollface:2,Success Kid:5,Bad Luck Brian:5,Mona Lisa:-5"],
+["Mèmes","Citez 9 applications de réseaux sociaux","TikTok:1,Instagram:1,Snapchat:1,YouTube:1,Facebook:1,Pinterest:2,Twitch:2,Reddit:2,Discord:5,Excel:-5"],
+["Mèmes","Citez 9 défis ou danses virales","Ice Bucket Challenge:1,Mannequin Challenge:1,Harlem Shake:1,Planking:2,Cinnamon Challenge:2,Floss:2,Dab:2,Gangnam Style:2,Running Man Challenge:5,Valse:-5"],
+["Mèmes","Citez 9 youtubeurs ou streamers célèbres","MrBeast:1,PewDiePie:1,Squeezie:1,Cyprien:1,Norman:2,Ninja:2,Pokimane:2,Inoxtag:2,Ibai:5,Steven Spielberg:-5"],
+["Religion","Citez 9 proches ou disciples de Jésus","Marie:1,Joseph:1,Jean-Baptiste:1,Marie-Madeleine:1,Lazare:2,Marthe:2,Élisabeth:2,Zachée:5,Nicodème:5,Moïse:-5"],
+["Religion","Citez 9 plaies d’Égypte","Eau changée en sang:1,Grenouilles:1,Sauterelles:1,Ténèbres:1,Moustiques:2,Mouches:2,Ulcères:2,Grêle:2,Peste du bétail:5,Éruption volcanique:-5"],
+["Religion","Citez 9 lieux de la Bible","Jérusalem:1,Bethléem:1,Nazareth:1,Jéricho:1,Galilée:2,Mont Sinaï:2,Babylone:2,Golgotha:2,Capharnaüm:5,La Mecque:-5"],
+["Égypte","Citez 9 éléments de l’Égypte antique","Hiéroglyphes:1,Momie:1,Papyrus:1,Pyramide:1,Sarcophage:2,Scarabée:2,Obélisque:2,Ankh:5,Vase canope:5,Colisée:-5"],
+["Égypte","Citez 9 plats ou boissons égyptiens","Koshari:1,Ful medames:1,Falafel:1,Molokhia:2,Kunafa:2,Basbousa:2,Shawarma:2,Karkadé:5,Mahshi:5,Paella:-5"],
+["Égypte","Citez 9 pays traversés par le Nil ou son bassin","Égypte:1,Soudan:1,Ouganda:2,Éthiopie:2,Soudan du Sud:2,Tanzanie:2,Kenya:2,Rwanda:5,Burundi:5,Maroc:-5"],
+["Musique","Citez 9 compositeurs classiques","Mozart:1,Beethoven:1,Bach:1,Chopin:1,Vivaldi:1,Debussy:2,Ravel:2,Schubert:2,Tchaïkovski:2,Michael Jackson:-5"],
+["Musique","Citez 9 instruments à vent","Flûte:1,Trompette:1,Saxophone:1,Clarinette:1,Trombone:2,Hautbois:2,Basson:2,Tuba:2,Cornemuse:5,Violon:-5"],
+["Musique","Citez 9 chanteurs ou chanteuses pop des années 2000","Britney Spears:1,Beyoncé:1,Rihanna:1,Justin Timberlake:1,Shakira:2,Christina Aguilera:2,Avril Lavigne:2,Pink:2,Kelly Clarkson:5,Elvis Presley:-5"],
+["Tech","Citez 9 systèmes d’exploitation","Windows:1,macOS:1,Linux:1,Android:1,iOS:1,Ubuntu:2,Chrome OS:2,Unix:5,Debian:5,Photoshop:-5"],
+["Tech","Citez 9 navigateurs web ou moteurs de recherche","Chrome:1,Firefox:1,Safari:1,Edge:1,Google:1,Bing:2,Opera:2,Brave:5,Qwant:5,Word:-5"],
+["Tech","Citez 9 objets connectés ou gadgets","Montre connectée:1,Enceinte connectée:1,Drone:1,Écouteurs sans fil:1,Tablette:1,Casque VR:2,Liseuse:2,Caméra d’action:2,Traqueur GPS:5,Machine à écrire:-5"],
+["Spécialités","Citez 9 ingrédients de la cuisine italienne","Tomate:1,Basilic:1,Mozzarella:1,Parmesan:1,Huile d’olive:1,Ail:2,Prosciutto:2,Mascarpone:2,Pecorino:5,Sauce soja:-5"],
+["Spécialités","Citez 9 spécialités belges ou suisses","Fondue:1,Raclette:1,Gaufre:1,Frites:1,Chocolat:1,Rösti:2,Moules-frites:2,Speculoos:2,Carbonade flamande:5,Haggis:-5"],
+["Spécialités","Citez 9 épices","Cannelle:1,Curcuma:1,Paprika:1,Cumin:1,Poivre:1,Safran:2,Cardamome:2,Muscade:2,Clou de girofle:2,Basilic:-5"],
+["Culture générale","Citez 9 choses qu’on trouve dans une cuisine","Frigo:1,Four:1,Casserole:1,Poêle:1,Évier:1,Micro-ondes:2,Grille-pain:2,Fouet:2,Passoire:2,Baignoire:-5"],
+["Culture générale","Citez 9 choses qui sont jaunes","Banane:1,Citron:1,Soleil:1,Poussin:1,Tournesol:1,Moutarde:2,Maïs:2,Taxi new-yorkais:2,Canari:5,Fraise:-5"],
+["Culture générale","Citez 9 choses qu’on emporte à la plage","Serviette:1,Crème solaire:1,Maillot de bain:1,Parasol:1,Lunettes de soleil:1,Seau:2,Pelle:2,Ballon:2,Tongs:5,Moufles:-5"],
+["Mèmes","Citez 9 plateformes de streaming ou de vidéo","Netflix:1,YouTube:1,Disney+:1,Prime Video:1,Twitch:2,Canal+:2,Apple TV+:2,Crunchyroll:5,Dailymotion:5,Deezer:-5"],
+["Mèmes","Citez 9 jeux vidéo devenus viraux","Among Us:1,Minecraft:1,Fortnite:1,Roblox:1,Flappy Bird:2,Fall Guys:2,Wordle:2,Pokémon GO:2,Candy Crush:5,Pétanque:-5"],
+["Mèmes","Citez 9 mots ou expressions d’Internet","LOL:1,MDR:1,Hashtag:1,Selfie:1,Spoiler:2,Fake news:2,Troll:2,Cringe:2,Ghosting:5,Télégramme:-5"],
+["Géographie","Citez 9 capitales d’Asie","Tokyo:1,Pékin:1,Séoul:1,Bangkok:1,New Delhi:1,Hanoï:2,Jakarta:2,Katmandou:2,Vientiane:5,Sydney:-5"],
+["Sport","Citez 9 sports de glisse","Surf:1,Skateboard:1,Snowboard:1,Ski:1,Luge:2,Planche à voile:2,Wakeboard:2,Kitesurf:2,Longboard:5,Boxe:-5"],
+["Football","Citez 9 clubs portugais, néerlandais ou belges","Benfica:1,FC Porto:1,Sporting Portugal:1,Ajax:1,PSV Eindhoven:2,Feyenoord:2,Anderlecht:2,Club Bruges:5,Braga:5,Celtic:-5"],
+["Divertissement","Citez 9 dessins animés des années 90","Pokémon:1,Dragon Ball Z:1,Les Simpson:1,Les Tortues Ninja:2,Sailor Moon:2,Bob l’éponge:2,Les Razmoket:2,Le Laboratoire de Dexter:5,Johnny Bravo:5,Peppa Pig:-5"],
+["Gastronomie","Citez 9 desserts","Tarte aux pommes:1,Mousse au chocolat:1,Crème brûlée:1,Glace:1,Tiramisu:2,Panna cotta:2,Cheesecake:2,Brownie:2,Clafoutis:5,Ratatouille:-5"],
+["Histoire","Citez 9 guerres célèbres","Première Guerre mondiale:1,Seconde Guerre mondiale:1,Guerre de Cent Ans:1,Guerre de Sécession:2,Guerre du Vietnam:2,Guerre de Troie:2,Guerre de Corée:2,Guerre d’Algérie:2,Guerre des Boers:5,Peste noire:-5"],
+["Science","Citez 9 maladies infectieuses","Grippe:1,Rougeole:1,Varicelle:1,Covid-19:1,Tuberculose:1,Paludisme:2,Choléra:2,Peste:2,Rage:5,Fracture:-5"]
+];
+function pick(n){var seen=[];try{seen=JSON.parse(localStorage.getItem("d9s")||"[]")}catch(e){}
+ var ok=DATA.filter(function(d){return CATS[d[0]]}),fresh=ok.filter(function(d){return seen.indexOf(d[1])<0}),p=shuf(fresh);
+ if(p.length<n){p=p.concat(shuf(ok.filter(function(d){return fresh.indexOf(d)<0})));seen=seen.filter(function(s){return!ok.some(function(d){return d[1]==s})})}
+ p=p.slice(0,n);if(p.length%2)p.pop();seen=seen.concat(p.map(function(d){return d[1]}));try{localStorage.setItem("d9s",JSON.stringify(seen))}catch(e){}return p}
+var app=document.getElementById("app"),G;
+function $(id){return document.getElementById(id)}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function clean(s,d){s=(s||"").replace(/[<>&"]/g,"").trim().slice(0,14);return s||d}
+function home(){
+ app.innerHTML='<div class="c" style="margin-top:20px"><h1>Devine <b>9</b></h1><p>Le quiz à jouer à voix haute entre amis</p></div><div style="margin-top:36px"><button class="btn red" id="b1">JOUER</button><button class="btn teal" id="b2">CATÉGORIES</button><button class="btn yel" id="b3">RÈGLES</button></div>';
+ $("b1").onclick=setup;$("b2").onclick=cats;$("b3").onclick=rules}
+function rules(){
+ app.innerHTML='<h2>Comment jouer</h2><div class="card"><p><b>1.</b> Le lecteur lit la question à voix haute. Il garde l’écran pour lui.</p><p><b>2.</b> Le joueur qui devine cite des réponses à voix haute pendant 60 secondes.</p><p><b>3.</b> Le lecteur touche chaque bonne réponse pour la valider. Les points sont indiqués à droite : les réponses rares valent plus.</p><p><b>4.</b> Attention à la bombe : la ligne à −5 est une mauvaise réponse. Si le joueur la cite, le lecteur la touche et perd 5 points.</p><p><b>5.</b> Les rôles s’inversent à chaque manche. Le plus gros score gagne.</p></div><button class="btn red sm" id="bk">RETOUR</button>';
+ $("bk").onclick=home}
+function cats(){
+ app.innerHTML='<h2>Catégories</h2><div class="card">'+Object.keys(CATS).map(function(k){return'<label class="tog">'+k+'<input type="checkbox" data-k="'+k+'"'+(CATS[k]?" checked":"")+'></label>'}).join("")+'</div><p class="c" id="cm"></p><button class="btn red sm" id="bk">RETOUR</button>';
+ var cb=document.querySelectorAll("input[data-k]");
+ cb.forEach(function(c){c.onchange=function(){CATS[c.dataset.k]=c.checked?1:0;if(!Object.keys(CATS).some(function(k){return CATS[k]})){CATS[c.dataset.k]=1;c.checked=true;$("cm").textContent="Garde au moins une catégorie."}}});
+ $("bk").onclick=home}
+function setup(){
+ app.innerHTML='<h2>Les deux équipes</h2><div class="card"><label>Équipe 1<input class="t" id="n1" placeholder="Les Jean" maxlength="14"></label><label>Équipe 2<input class="t" id="n2" placeholder="Les Sophie" maxlength="14"></label><label>Durée de la partie<select class="t" id="nr"><option value="6">6 manches</option><option value="10">10 manches</option><option value="16">16 manches</option></select></label></div><button class="btn red" id="go">C’EST PARTI</button><button class="btn yel sm" id="bk">RETOUR</button>';
+ $("bk").onclick=home;
+ $("go").onclick=function(){var pool=pick(+$("nr").value);
+  G={n:[clean($("n1").value,"Équipe 1"),clean($("n2").value,"Équipe 2")],pts:[0,0],r:0,qs:pool,h:[]};handoff()}}
+function handoff(){
+ var g=G.r%2,l=1-g;
+ app.innerHTML='<div class="c"><p>Manche '+(G.r+1)+' sur '+G.qs.length+'</p><h2>Lit la question : '+G.n[l]+'</h2><p>Prends l’appareil et garde l’écran caché.</p><h2>Devine : '+G.n[g]+'</h2><p>Ne regarde pas l’écran et réponds à voix haute.</p></div><div class="card"><p class="c" style="margin:0"><b>Score :</b> '+G.n[0]+' '+G.pts[0]+', '+G.n[1]+' '+G.pts[1]+'</p></div><button class="btn red" id="rd">JE SUIS PRÊT</button>';
+ $("rd").onclick=play}
+function play(){
+ var d=G.qs[G.r],items=shuf(d[2].split(",").map(function(s){var i=s.lastIndexOf(":");return{n:s.slice(0,i),p:+s.slice(i+1),on:0}})),left=60,iv,score=0;
+ app.innerHTML='<div class="card"><p class="q">'+d[1]+'</p><div class="bar"><i id="pg"></i></div><div class="sc"><span class="tm" id="tm">60</span><span>Score : <b id="sc">0</b></span></div></div><div class="list" id="ls"></div><button class="btn yel sm" id="fin">TERMINER LA MANCHE</button>';
+ var ls=$("ls");
+ items.forEach(function(it){var b=document.createElement("button");b.className="row"+(it.p<0?" neg":"");b.setAttribute("aria-pressed","false");
+  b.innerHTML="<span>"+(it.p<0?"💣 ":"")+it.n+'</span><span class="p">'+it.p+"</span>";
+  b.onclick=function(){it.on=!it.on;b.setAttribute("aria-pressed",it.on?"true":"false");score+=it.on?it.p:-it.p;$("sc").textContent=score};ls.appendChild(b)});
+ setTimeout(function(){$("pg").style.width=(59/60*100)+"%"},50);
+ iv=setInterval(function(){left--;$("tm").textContent=left;$("pg").style.width=(left/60*100)+"%";if(left<=0)end()},1000);
+ $("fin").onclick=end;
+ function end(){clearInterval(iv);G.pts[G.r%2]+=score;G.h.push([G.r%2,score]);result(d,items,score)}}
+function result(d,items,score){
+ var g=G.r%2,last=G.r==G.qs.length-1;
+ var rows=items.map(function(i){var c,t;if(i.p>0){c=i.on?"ok":"ko";t=i.on?"✓ ":"✗ "}else{c=i.on?"ko":"nt";t="💣 "}
+  return'<div class="row '+c+'"><span>'+t+i.n+'</span><span class="p">'+(i.p<0&&!i.on?"évitée":i.p)+'</span></div>'}).join("");
+ var tr=G.h.map(function(h,i){return'<tr><td>Manche '+(i+1)+'</td><td>'+(h[0]==0?h[1]:"–")+'</td><td>'+(h[0]==1?h[1]:"–")+'</td></tr>'}).join("");
+ app.innerHTML='<h2 class="c">Manche terminée</h2><div class="card"><div class="big">'+(score>0?"+":"")+score+' points</div><p class="c">pour '+G.n[g]+'</p></div><h2>Récap des réponses</h2><p>Vert : trouvée. Rouge : pas donnée.</p><div class="list">'+rows+'</div><h2>Points par manche</h2><div class="card"><table><tr><th></th><th>'+G.n[0]+'</th><th>'+G.n[1]+'</th></tr>'+tr+'<tr class="tot"><td>Total</td><td>'+G.pts[0]+'</td><td>'+G.pts[1]+'</td></tr></table></div><button class="btn red" id="nx">'+(last?"VOIR LE RÉSULTAT":"MANCHE SUIVANTE")+'</button>';
+ $("nx").onclick=function(){if(last)final();else{G.r++;handoff()}};window.scrollTo(0,0)}
+function resultOld(d,items,score){
+ var g=G.r%2,miss=items.filter(function(i){return i.p>0&&!i.on}).map(function(i){return i.n}),last=G.r==G.qs.length-1;
+ app.innerHTML='<h2 class="c">Manche terminée</h2><div class="card"><div class="big">'+(score>0?"+":"")+score+' points</div><p class="c">pour '+G.n[g]+'</p>'+(miss.length?'<p class="miss"><b>Réponses non trouvées :</b> '+miss.join(", ")+'.</p>':'<p class="miss">Toutes les bonnes réponses ont été trouvées. Bravo !</p>')+'</div><button class="btn red" id="nx">'+(last?"VOIR LE RÉSULTAT":"MANCHE SUIVANTE")+'</button>';
+ $("nx").onclick=function(){if(last)final();else{G.r++;handoff()}}}
+function final(){
+ var a=G.pts[0],b=G.pts[1],w=a==b?"Égalité !":(a>b?G.n[0]:G.n[1])+" gagne !";
+ app.innerHTML='<h1><b>'+w+'</b></h1><div class="card"><p class="sc"><span>'+G.n[0]+'</span><b>'+a+' points</b></p><p class="sc"><span>'+G.n[1]+'</span><b>'+b+' points</b></p></div><button class="btn red" id="again">REJOUER</button><button class="btn teal sm" id="hm">MENU</button>';
+ $("again").onclick=function(){var n=G.n;var pool=pick(G.qs.length);G={n:n,pts:[0,0],r:0,qs:pool,h:[]};handoff()};$("hm").onclick=home}
+var L="fr";try{L=localStorage.getItem("d9l")||"fr"}catch(e){}
+function setL(l){L=l;try{localStorage.setItem("d9l",l)}catch(e){}document.documentElement.lang=l;document.documentElement.dir=l=="ar"?"rtl":"ltr"}
+setL(L);
+var S={fr:{tag:"Le quiz à jouer à voix haute entre amis",play:"JOUER",cats:"CATÉGORIES",rules:"RÈGLES",back:"RETOUR",rt:"Comment jouer",rl:["Le lecteur lit la question à voix haute et garde l’écran pour lui.","L’autre équipe cite des réponses à voix haute pendant 60 secondes.","Le lecteur touche chaque bonne réponse pour la valider. Les réponses rares valent plus de points.","Attention à la bombe : la ligne à −5 est une mauvaise réponse. Si elle est citée, le lecteur la touche et perd 5 points.","Les rôles s’inversent à chaque manche. L’équipe avec le plus gros score gagne."],ct:"Catégories",one:"Garde au moins une catégorie.",tt:"Les deux équipes",e1:"Équipe 1",e2:"Équipe 2",p1:"Les Jean",p2:"Les Sophie",ln:"Durée de la partie",rd:"manches",go:"C’EST PARTI",mn:"Manche",o:"sur",rl1:"Lit la question :",gs:"Devine :",hh:"Prends l’appareil et garde l’écran caché.",sc:"Score",ok:"JE SUIS PRÊT",fn:"TERMINER LA MANCHE",ro:"Manche terminée",pt:"points",fo:"pour",rc:"Récap des réponses",lg:"Vert : trouvée. Rouge : pas donnée.",av:"évitée",pm:"Points par manche",tot:"Total",nx:"MANCHE SUIVANTE",sr:"VOIR LE RÉSULTAT",eq:"Égalité !",win:"gagne !",ag:"REJOUER",mu:"MENU",note:""},
+en:{tag:"The quiz to play out loud with friends",play:"PLAY",cats:"CATEGORIES",rules:"RULES",back:"BACK",rt:"How to play",rl:["The reader reads the question aloud and keeps the screen hidden.","The other team says answers aloud for 60 seconds.","The reader taps each correct answer to validate it. Rarer answers are worth more points.","Watch out for the bomb: the −5 line is a wrong answer. If it is said, the reader taps it and loses 5 points.","Roles swap every round. The team with the highest score wins."],ct:"Categories",one:"Keep at least one category.",tt:"The two teams",e1:"Team 1",e2:"Team 2",p1:"The Reds",p2:"The Blues",ln:"Game length",rd:"rounds",go:"LET’S GO",mn:"Round",o:"of",rl1:"Reads the question:",gs:"Guesses:",hh:"Take the device and keep the screen hidden.",sc:"Score",ok:"I’M READY",fn:"END ROUND",ro:"Round over",pt:"points",fo:"for",rc:"Answer recap",lg:"Green: found. Red: not given.",av:"avoided",pm:"Points per round",tot:"Total",nx:"NEXT ROUND",sr:"SEE RESULT",eq:"It’s a tie!",win:"wins!",ag:"PLAY AGAIN",mu:"MENU",note:"Only 38 quizzes are translated for now."},
+ar:{tag:"لعبة أسئلة تُلعب بصوت عالٍ مع الأصدقاء",play:"العب",cats:"الفئات",rules:"القواعد",back:"رجوع",rt:"طريقة اللعب",rl:["يقرأ القارئ السؤال بصوت عالٍ ويُبقي الشاشة مخفية.","يذكر الفريق الآخر الإجابات بصوت عالٍ خلال 60 ثانية.","يضغط القارئ على كل إجابة صحيحة لتأكيدها. الإجابات النادرة تمنح نقاطًا أكثر.","احذر القنبلة: السطر الذي قيمته −5 إجابة خاطئة. إذا ذُكر يضغط عليه القارئ ويخسر 5 نقاط.","تتبدل الأدوار في كل جولة. يفوز الفريق صاحب أعلى نتيجة."],ct:"الفئات",one:"أبقِ فئة واحدة على الأقل.",tt:"الفريقان",e1:"الفريق 1",e2:"الفريق 2",p1:"الأحمر",p2:"الأزرق",ln:"مدة اللعبة",rd:"جولات",go:"هيا نبدأ",mn:"الجولة",o:"من",rl1:"يقرأ السؤال:",gs:"يخمّن:",hh:"خذ الجهاز وأبقِ الشاشة مخفية.",sc:"النتيجة",ok:"أنا جاهز",fn:"إنهاء الجولة",ro:"انتهت الجولة",pt:"نقطة",fo:"لـ",rc:"ملخص الإجابات",lg:"أخضر: تم العثور عليها. أحمر: لم تُذكر.",av:"تم تجنبها",pm:"النقاط في كل جولة",tot:"المجموع",nx:"الجولة التالية",sr:"عرض النتيجة",eq:"تعادل!",win:"يفوز!",ag:"العب مجددًا",mu:"القائمة",note:"تمت ترجمة 38 اختبارًا فقط حتى الآن."}};
+function T(k){return S[L][k]||S.fr[k]}
+var CN={en:{"Géographie":"Geography","Sport":"Sport","Football":"Football","Divertissement":"Entertainment","Gastronomie":"Food","Histoire":"History","Science":"Science"},ar:{"Géographie":"الجغرافيا","Sport":"الرياضة","Football":"كرة القدم","Divertissement":"الترفيه","Gastronomie":"الطعام","Histoire":"التاريخ","Science":"العلوم"}};
+var NC={en:{Religion:"Bible","Égypte":"Egypt",Musique:"Music",Tech:"Tech","Spécialités":"World food","Culture générale":"General knowledge","Mèmes":"Memes & internet"},ar:{Religion:"الكتاب المقدس","Égypte":"مصر",Musique:"الموسيقى",Tech:"التقنية","Spécialités":"المأكولات العالمية","Culture générale":"ثقافة عامة","Mèmes":"الإنترنت والميمز"}};
+var CI={"Géographie":"🌍",Sport:"🏀",Football:"⚽",Divertissement:"🎬",Gastronomie:"🍽️",Histoire:"🏛️",Science:"🔬",Religion:"✝️","Égypte":"🏺",Musique:"🎵",Tech:"💻","Spécialités":"🌶️","Culture générale":"🎲","Mèmes":"😂"};
+function cn(k){return((CN[L]||{})[k]||(NC[L]||{})[k]||k)}
+var TR={en:{
+"Citez 9 pays d’Amérique du Sud":["Name 9 South American countries","Brazil:1,Argentina:1,Chile:1,Colombia:2,Peru:2,Ecuador:2,Bolivia:5,Paraguay:5,Uruguay:2,Mexico:-5"],
+"Citez 9 pays d’Asie":["Name 9 Asian countries","China:1,Japan:1,India:1,Thailand:1,Vietnam:2,South Korea:2,Indonesia:2,Nepal:5,Laos:5,Peru:-5"],
+"Citez 9 sports d’hiver":["Name 9 winter sports","Alpine skiing:1,Snowboarding:1,Figure skating:1,Ice hockey:1,Curling:2,Luge:2,Bobsleigh:2,Biathlon:2,Nordic combined:5,Rowing:-5"],
+"Citez 9 sports nautiques":["Name 9 water sports","Swimming:1,Sailing:1,Surfing:1,Rowing:1,Kayaking:2,Diving:2,Water polo:2,Windsurfing:2,Artistic swimming:5,Climbing:-5"],
+"Citez 9 pays qui ont organisé une Coupe du monde de football":["Name 9 countries that have hosted a football World Cup","France:1,Brazil:1,Germany:1,Italy:1,Mexico:2,Argentina:2,Spain:2,Sweden:5,Chile:5,Portugal:-5"],
+"Citez 9 gardiens de but célèbres":["Name 9 famous goalkeepers","Buffon:1,Neuer:1,Casillas:1,Courtois:2,Barthez:2,Lloris:2,Schmeichel:2,Yashin:5,Zoff:5,Maldini:-5"],
+"Citez 9 princesses Disney":["Name 9 Disney princesses","Cinderella:1,Snow White:1,Belle:1,Ariel:1,Jasmine:2,Mulan:2,Rapunzel:2,Tiana:5,Pocahontas:5,Fiona:-5"],
+"Citez 9 films de Christopher Nolan":["Name 9 Christopher Nolan films","Inception:1,Interstellar:1,The Dark Knight:1,Oppenheimer:1,Memento:2,Dunkirk:2,The Prestige:2,Batman Begins:2,Tenet:2,Gravity:-5"],
+"Citez 9 légumes":["Name 9 vegetables","Carrot:1,Leek:1,Zucchini:1,Eggplant:1,Broccoli:1,Cabbage:2,Radish:2,Turnip:2,Parsnip:5,Banana:-5"],
+"Citez 9 fruits exotiques":["Name 9 exotic fruits","Banana:1,Pineapple:1,Mango:1,Kiwi:1,Papaya:2,Passion fruit:2,Lychee:2,Guava:5,Dragon fruit:5,Apple:-5"],
+"Citez 9 dieux grecs":["Name 9 Greek gods","Zeus:1,Athena:1,Apollo:1,Poseidon:1,Aphrodite:1,Ares:2,Hermes:2,Hera:2,Hades:2,Jupiter:-5"],
+"Citez 9 monuments de Paris":["Name 9 Paris landmarks","Eiffel Tower:1,Arc de Triomphe:1,Notre-Dame:1,Sacré-Cœur:1,Louvre:2,Panthéon:2,Opéra Garnier:2,Sainte-Chapelle:5,Les Invalides:5,Big Ben:-5"],
+"Citez 9 organes du corps humain":["Name 9 human organs","Heart:1,Lungs:1,Liver:1,Brain:1,Kidneys:1,Stomach:2,Intestine:2,Spleen:5,Pancreas:5,Femur:-5"],
+"Citez 9 astres du système solaire":["Name 9 bodies of the solar system","Sun:1,Moon:1,Mars:1,Jupiter:1,Saturn:1,Neptune:2,Pluto:2,Titan:5,Io:5,Sirius:-5"]},
+ar:{
+"Citez 9 pays d’Amérique du Sud":["اذكر 9 دول من أمريكا الجنوبية","البرازيل:1,الأرجنتين:1,تشيلي:1,كولومبيا:2,بيرو:2,الإكوادور:2,بوليفيا:5,باراغواي:5,أوروغواي:2,المكسيك:-5"],
+"Citez 9 pays d’Asie":["اذكر 9 دول آسيوية","الصين:1,اليابان:1,الهند:1,تايلاند:1,فيتنام:2,كوريا الجنوبية:2,إندونيسيا:2,نيبال:5,لاوس:5,بيرو:-5"],
+"Citez 9 sports d’hiver":["اذكر 9 رياضات شتوية","التزلج الألبي:1,التزلج على اللوح:1,التزلج الفني على الجليد:1,هوكي الجليد:1,الكيرلنغ:2,الزحلقة:2,البوبسلاي:2,البياثلون:2,التزلج الشمالي المركب:5,التجديف:-5"],
+"Citez 9 sports nautiques":["اذكر 9 رياضات مائية","السباحة:1,الإبحار:1,ركوب الأمواج:1,التجديف:1,الكاياك:2,القفز في الماء:2,كرة الماء:2,ركوب الأمواج الشراعية:2,السباحة الفنية:5,التسلق:-5"],
+"Citez 9 pays qui ont organisé une Coupe du monde de football":["اذكر 9 دول استضافت كأس العالم لكرة القدم","فرنسا:1,البرازيل:1,ألمانيا:1,إيطاليا:1,المكسيك:2,الأرجنتين:2,إسبانيا:2,السويد:5,تشيلي:5,البرتغال:-5"],
+"Citez 9 gardiens de but célèbres":["اذكر 9 حراس مرمى مشهورين","بوفون:1,نوير:1,كاسياس:1,كورتوا:2,بارتيز:2,لوريس:2,شمايكل:2,ياشين:5,زوف:5,مالديني:-5"],
+"Citez 9 princesses Disney":["اذكر 9 أميرات ديزني","سندريلا:1,سنو وايت:1,بيل:1,أرييل:1,ياسمين:2,مولان:2,رابونزل:2,تيانا:5,بوكاهونتاس:5,فيونا:-5"],
+"Citez 9 films de Christopher Nolan":["اذكر 9 أفلام لكريستوفر نولان","إنسبشن:1,إنترستيلر:1,فارس الظلام:1,أوبنهايمر:1,ميمنتو:2,دنكيرك:2,ذا بريستيج:2,باتمان بيغينز:2,تينيت:2,جرافيتي:-5"],
+"Citez 9 légumes":["اذكر 9 خضروات","جزر:1,كراث:1,كوسا:1,باذنجان:1,بروكلي:1,ملفوف:2,فجل:2,لفت:2,جزر أبيض:5,موز:-5"],
+"Citez 9 fruits exotiques":["اذكر 9 فواكه استوائية","موز:1,أناناس:1,مانجو:1,كيوي:1,بابايا:2,فاكهة العاطفة:2,ليتشي:2,جوافة:5,فاكهة التنين:5,تفاح:-5"],
+"Citez 9 dieux grecs":["اذكر 9 آلهة يونانية","زيوس:1,أثينا:1,أبولو:1,بوسيدون:1,أفروديت:1,آريس:2,هرمس:2,هيرا:2,هاديس:2,جوبيتر:-5"],
+"Citez 9 monuments de Paris":["اذكر 9 معالم في باريس","برج إيفل:1,قوس النصر:1,نوتردام:1,كنيسة القلب المقدس:1,اللوفر:2,البانثيون:2,أوبرا غارنييه:2,سانت شابيل:5,ليزانفاليد:5,بيغ بن:-5"],
+"Citez 9 organes du corps humain":["اذكر 9 أعضاء في جسم الإنسان","القلب:1,الرئتان:1,الكبد:1,الدماغ:1,الكليتان:1,المعدة:2,الأمعاء:2,الطحال:5,البنكرياس:5,عظم الفخذ:-5"],
+"Citez 9 astres du système solaire":["اذكر 9 أجرام في المجموعة الشمسية","الشمس:1,القمر:1,المريخ:1,المشتري:1,زحل:1,نبتون:2,بلوتو:2,تيتان:5,آيو:5,الشعرى:-5"]}};
+function qx(d){return L=="fr"?[d[1],d[2]]:TR[L][d[1]]}
+function pick(n){var seen=[];try{seen=JSON.parse(localStorage.getItem("d9s")||"[]")}catch(e){}
+ var ok=DATA.filter(function(d){return CATS[d[0]]&&(L=="fr"||TR[L][d[1]])}),fresh=ok.filter(function(d){return seen.indexOf(d[1])<0}),p=shuf(fresh);
+ if(p.length<n){p=p.concat(shuf(ok.filter(function(d){return fresh.indexOf(d)<0})));seen=seen.filter(function(s){return!ok.some(function(d){return d[1]==s})})}
+ p=p.slice(0,n);if(p.length%2)p.pop();seen=seen.concat(p.map(function(d){return d[1]}));try{localStorage.setItem("d9s",JSON.stringify(seen))}catch(e){}return p}
+function home(){
+ app.innerHTML='<div class="c" style="margin-top:20px"><div class="logo-wrap"><h1 class="logo" aria-label="B.LADI"><span class="B">B</span><span class="r">.LADI</span></h1></div><p>'+T("tag")+'</p></div><div style="margin-top:28px"><button class="btn red" id="b1">'+T("play")+'</button><button class="btn teal" id="b2">'+T("cats")+'</button><button class="btn yel" id="b3">'+T("rules")+'</button></div><div class="lg">'+["fr","en","ar"].map(function(l){return'<button data-l="'+l+'" class="'+(l==L?"on":"")+'" aria-pressed="'+(l==L)+'">'+({fr:"Français",en:"English",ar:"العربية"})[l]+'</button>'}).join("")+'</div>'+(L!="fr"?'<p class="c">'+T("note")+'</p>':"");
+ $("b1").onclick=setup;$("b2").onclick=cats;$("b3").onclick=rules;
+ document.querySelectorAll("[data-l]").forEach(function(b){b.onclick=function(){setL(b.dataset.l);home()}})}
+function rules(){
+ app.innerHTML='<h2>'+T("rt")+'</h2><div class="card">'+T("rl").map(function(s,i){return'<p><b>'+(i+1)+'.</b> '+s+'</p>'}).join("")+'</div><button class="btn red sm" id="bk">'+T("back")+'</button>';
+ $("bk").onclick=home}
+function cats(){
+ app.innerHTML='<h2>'+T("ct")+'</h2><div class="card">'+Object.keys(CATS).map(function(k){return'<label class="tog">'+cn(k)+'<input type="checkbox" data-k="'+k+'"'+(CATS[k]?" checked":"")+'></label>'}).join("")+'</div><p class="c" id="cm"></p><button class="btn red sm" id="bk">'+T("back")+'</button>';
+ document.querySelectorAll("input[data-k]").forEach(function(c){c.onchange=function(){CATS[c.dataset.k]=c.checked?1:0;if(!Object.keys(CATS).some(function(k){return CATS[k]})){CATS[c.dataset.k]=1;c.checked=true;$("cm").textContent=T("one")}}});
+ $("bk").onclick=home}
+function setup(){
+ app.innerHTML='<h2>'+T("tt")+'</h2><div class="card"><label>'+T("e1")+'<input class="t" id="n1" placeholder="'+T("p1")+'" maxlength="14"></label><label>'+T("e2")+'<input class="t" id="n2" placeholder="'+T("p2")+'" maxlength="14"></label><label>'+T("ln")+'<select class="t" id="nr">'+[6,10,16].map(function(n){return'<option value="'+n+'">'+n+' '+T("rd")+'</option>'}).join("")+'</select></label></div><button class="btn red" id="go">'+T("go")+'</button><button class="btn yel sm" id="bk">'+T("back")+'</button>';
+ $("bk").onclick=home;
+ $("go").onclick=function(){var pool=pick(+$("nr").value);G={n:[clean($("n1").value,T("e1")),clean($("n2").value,T("e2"))],pts:[0,0],r:0,qs:pool,h:[]};handoff()}}
+function handoff(){
+ var g=G.r%2,l=1-g;
+ app.innerHTML='<div class="c"><p>'+T("mn")+' '+(G.r+1)+' '+T("o")+' '+G.qs.length+'</p><h2>'+T("rl1")+' '+G.n[l]+'</h2><p>'+T("hh")+'</p><h2>'+T("gs")+' '+G.n[g]+'</h2></div><div class="card"><p class="c" style="margin:0"><b>'+T("sc")+' :</b> '+G.n[0]+' '+G.pts[0]+', '+G.n[1]+' '+G.pts[1]+'</p></div><button class="btn red" id="rd">'+T("ok")+'</button>';
+ $("rd").onclick=play}
+function play(){
+ var q=qx(G.qs[G.r]),items=shuf(q[1].split(",").map(function(s){var i=s.lastIndexOf(":");return{n:s.slice(0,i),p:+s.slice(i+1),on:0}})),left=60,iv,score=0;
+ app.innerHTML='<div class="card"><p class="q">'+q[0]+'</p><div class="bar"><i id="pg"></i></div><div class="sc"><span class="tm" id="tm">60</span><span>'+T("sc")+' : <b id="sc">0</b></span></div></div><div class="list" id="ls"></div><button class="btn yel sm" id="fin">'+T("fn")+'</button>';
+ var ls=$("ls");
+ items.forEach(function(it){var b=document.createElement("button");b.className="row"+(it.p<0?" neg":"");b.setAttribute("aria-pressed","false");
+  b.innerHTML="<span>"+(it.p<0?"💣 ":"")+it.n+'</span><span class="p">'+it.p+"</span>";
+  b.onclick=function(){it.on=!it.on;b.setAttribute("aria-pressed",it.on?"true":"false");score+=it.on?it.p:-it.p;$("sc").textContent=score};ls.appendChild(b)});
+ setTimeout(function(){$("pg").style.width=(59/60*100)+"%"},50);
+ iv=setInterval(function(){left--;$("tm").textContent=left;$("pg").style.width=(left/60*100)+"%";if(left<=0)end()},1000);
+ $("fin").onclick=end;
+ function end(){clearInterval(iv);G.pts[G.r%2]+=score;G.h.push([G.r%2,score]);result(items,score)}}
+function result(items,score){
+ var g=G.r%2,last=G.r==G.qs.length-1;
+ var rows=items.map(function(i){var c,t;if(i.p>0){c=i.on?"ok":"ko";t=i.on?"✓ ":"✗ "}else{c=i.on?"ko":"nt";t="💣 "}
+  return'<div class="row '+c+'"><span>'+t+i.n+'</span><span class="p">'+(i.p<0&&!i.on?T("av"):i.p)+'</span></div>'}).join("");
+ var tr=G.h.map(function(h,i){return'<tr><td>'+T("mn")+' '+(i+1)+'</td><td>'+(h[0]==0?h[1]:"–")+'</td><td>'+(h[0]==1?h[1]:"–")+'</td></tr>'}).join("");
+ app.innerHTML='<h2 class="c">'+T("ro")+'</h2><div class="card"><div class="big">'+(score>0?"+":"")+score+' '+T("pt")+'</div><p class="c">'+T("fo")+' '+G.n[g]+'</p></div><h2>'+T("rc")+'</h2><p>'+T("lg")+'</p><div class="list">'+rows+'</div><h2>'+T("pm")+'</h2><div class="card"><table><tr><th></th><th>'+G.n[0]+'</th><th>'+G.n[1]+'</th></tr>'+tr+'<tr class="tot"><td>'+T("tot")+'</td><td>'+G.pts[0]+'</td><td>'+G.pts[1]+'</td></tr></table></div><button class="btn red" id="nx">'+(last?T("sr"):T("nx"))+'</button>';
+ $("nx").onclick=function(){if(last)fin();else{G.r++;handoff()}};window.scrollTo(0,0)}
+function fin(){
+ var a=G.pts[0],b=G.pts[1],w=a==b?T("eq"):(a>b?G.n[0]:G.n[1])+" "+T("win");
+ app.innerHTML='<h1><b>'+w+'</b></h1><div class="card"><p class="sc"><span>'+G.n[0]+'</span><b>'+a+' '+T("pt")+'</b></p><p class="sc"><span>'+G.n[1]+'</span><b>'+b+' '+T("pt")+'</b></p></div><button class="btn red" id="again">'+T("ag")+'</button><button class="btn teal sm" id="hm">'+T("mu")+'</button>';
+ $("again").onclick=function(){var n=G.n,pool=pick(G.qs.length);G={n:n,pts:[0,0],r:0,qs:pool,h:[]};handoff()};$("hm").onclick=home}
+home();
+Object.assign(S.fr,{jk:"Sélectionne ton joker (facultatif)",cp:"C’EST PARTI !",jo:"JOUER",hd:"L’équipe {a} tient l’appareil. L’équipe {b} répond à la question.",sv:"SUIVANT",scT:"Scores",rv:"REVANCHE",jn:"Joker"});
+Object.assign(S.en,{jk:"Pick your joker (optional)",cp:"LET’S GO!",jo:"PLAY",hd:"Team {a} holds the device. Team {b} answers the question.",sv:"NEXT",scT:"Scores",rv:"REMATCH",jn:"Joker"});
+Object.assign(S.ar,{jk:"اختر جوكر (اختياري)",cp:"هيا بنا!",jo:"العب",hd:"الفريق {a} يمسك الجهاز. الفريق {b} يجيب عن السؤال.",sv:"التالي",scT:"النتائج",rv:"إعادة المباراة",jn:"جوكر"});
+var JL={p:"+2",x:"×2",q:"?"};
+Object.assign(TR.en,{
+"Citez 9 fruits à noyau":["Name 9 stone fruits","Cherry:1,Peach:1,Apricot:1,Plum:1,Nectarine:2,Mirabelle plum:2,Date:2,Olive:5,Mango:5,Strawberry:-5"],
+"Citez 9 animaux marins":["Name 9 marine animals","Shark:1,Dolphin:1,Whale:1,Octopus:1,Orca:1,Jellyfish:2,Seahorse:2,Ray:2,Moray eel:5,Hippopotamus:-5"],
+"Citez 9 animaux d’Afrique":["Name 9 African animals","Lion:1,Elephant:1,Giraffe:1,Zebra:1,Hippopotamus:2,Cheetah:2,Wildebeest:2,Hyena:2,Okapi:5,Kangaroo:-5"],
+"Citez 9 instruments à vent":["Name 9 wind instruments","Flute:1,Trumpet:1,Saxophone:1,Clarinet:1,Trombone:2,Oboe:2,Bassoon:2,Tuba:2,Bagpipes:5,Violin:-5"],
+"Citez 9 compositeurs classiques":["Name 9 classical composers","Mozart:1,Beethoven:1,Bach:1,Chopin:1,Vivaldi:1,Debussy:2,Ravel:2,Schubert:2,Tchaikovsky:2,Michael Jackson:-5"],
+"Citez 9 pays d’Afrique":["Name 9 African countries","Egypt:1,Morocco:1,Algeria:1,Senegal:1,Kenya:2,Ethiopia:2,Ghana:2,Namibia:5,Botswana:5,Yemen:-5"],
+"Citez 9 capitales d’Afrique":["Name 9 African capitals","Cairo:1,Rabat:1,Algiers:1,Dakar:1,Nairobi:2,Addis Ababa:2,Accra:2,Windhoek:5,Lusaka:5,Baghdad:-5"],
+"Citez 9 super-héros de l’univers Marvel":["Name 9 Marvel superheroes","Spider-Man:1,Iron Man:1,Hulk:1,Thor:1,Captain America:1,Black Widow:2,Black Panther:2,Doctor Strange:2,Ant-Man:5,Batman:-5"],
+"Citez 9 fleuves ou rivières de France":["Name 9 rivers of France","Seine:1,Loire:1,Rhône:1,Garonne:1,Dordogne:2,Marne:2,Saône:2,Charente:5,Allier:5,Danube:-5"],
+"Citez 9 sports d’équipe":["Name 9 team sports","Football:1,Rugby:1,Basketball:1,Handball:1,Volleyball:1,Hockey:2,Water polo:2,Baseball:2,Cricket:2,Tennis:-5"],
+"Citez 9 sports de raquette":["Name 9 racket sports","Tennis:1,Badminton:1,Squash:1,Table tennis:1,Padel:2,Basque pelota:2,Racquetball:5,Pickleball:5,Real tennis:5,Golf:-5"],
+"Citez 9 herbes aromatiques":["Name 9 herbs","Basil:1,Thyme:1,Parsley:1,Rosemary:1,Mint:1,Chives:2,Tarragon:2,Cilantro:2,Dill:5,Pepper:-5"]});
+Object.assign(TR.ar,{
+"Citez 9 fruits à noyau":["اذكر 9 فواكه ذات نواة","كرز:1,خوخ:1,مشمش:1,برقوق:1,نكتارين:2,ميرابيل:2,تمر:2,زيتون:5,مانجو:5,فراولة:-5"],
+"Citez 9 animaux marins":["اذكر 9 حيوانات بحرية","قرش:1,دلفين:1,حوت:1,أخطبوط:1,أوركا:1,قنديل البحر:2,حصان البحر:2,سمك الراي:2,ثعبان البحر الموراي:5,فرس النهر:-5"],
+"Citez 9 animaux d’Afrique":["اذكر 9 حيوانات أفريقية","أسد:1,فيل:1,زرافة:1,حمار وحشي:1,فرس النهر:2,فهد:2,نو:2,ضبع:2,أوكابي:5,كنغر:-5"],
+"Citez 9 instruments à vent":["اذكر 9 آلات نفخ","ناي:1,بوق:1,ساكسفون:1,كلارينيت:1,ترومبون:2,أوبوا:2,باسون:2,توبا:2,مزمار القربة:5,كمان:-5"],
+"Citez 9 compositeurs classiques":["اذكر 9 مؤلفين موسيقيين كلاسيكيين","موزارت:1,بيتهوفن:1,باخ:1,شوبان:1,فيفالدي:1,ديبوسي:2,رافيل:2,شوبرت:2,تشايكوفسكي:2,مايكل جاكسون:-5"],
+"Citez 9 pays d’Afrique":["اذكر 9 دول أفريقية","مصر:1,المغرب:1,الجزائر:1,السنغال:1,كينيا:2,إثيوبيا:2,غانا:2,ناميبيا:5,بوتسوانا:5,اليمن:-5"],
+"Citez 9 capitales d’Afrique":["اذكر 9 عواصم أفريقية","القاهرة:1,الرباط:1,الجزائر:1,داكار:1,نيروبي:2,أديس أبابا:2,أكرا:2,ويندهوك:5,لوساكا:5,بغداد:-5"],
+"Citez 9 super-héros de l’univers Marvel":["اذكر 9 أبطال خارقين من مارفل","سبايدرمان:1,آيرون مان:1,هالك:1,ثور:1,كابتن أمريكا:1,بلاك ويدو:2,بلاك بانثر:2,دكتور سترينج:2,آنت مان:5,باتمان:-5"],
+"Citez 9 fleuves ou rivières de France":["اذكر 9 أنهار في فرنسا","السين:1,اللوار:1,الرون:1,الغارون:1,الدوردوني:2,المارن:2,السون:2,الشارانت:5,الأليي:5,الدانوب:-5"],
+"Citez 9 sports d’équipe":["اذكر 9 رياضات جماعية","كرة القدم:1,الرغبي:1,كرة السلة:1,كرة اليد:1,الكرة الطائرة:1,الهوكي:2,كرة الماء:2,البيسبول:2,الكريكت:2,التنس:-5"],
+"Citez 9 sports de raquette":["اذكر 9 رياضات المضرب","التنس:1,الريشة الطائرة:1,السكواش:1,تنس الطاولة:1,البادل:2,البيلوتا الباسكية:2,الراكيتبول:5,البيكلبول:5,التنس الملكي:5,الغولف:-5"],
+"Citez 9 herbes aromatiques":["اذكر 9 أعشاب عطرية","ريحان:1,زعتر:1,بقدونس:1,إكليل الجبل:1,نعناع:1,ثوم معمر:2,طرخون:2,كزبرة:2,شبت:5,فلفل:-5"]});
+[
+["Géographie","pays d’Amérique centrale ou des Caraïbes","Cuba:1,Jamaïque:1,Haïti:2,Panama:2,Costa Rica:2,Guatemala:2,Nicaragua:5,Honduras:5,Belize:5,Venezuela:-5"],
+["Géographie","lacs célèbres","Léman:1,Victoria:1,Titicaca:1,Baïkal:2,Lac Majeur:2,Lac de Garde:2,Annecy:2,Tanganyika:5,Ontario:2,Tamise:-5"],
+["Géographie","déserts","Sahara:1,Gobi:1,Kalahari:1,Atacama:2,Namib:2,Mojave:2,Thar:5,Néguev:5,Taklamakan:5,Amazonie:-5"],
+["Géographie","mers ou océans","Océan Atlantique:1,Océan Pacifique:1,Océan Indien:1,Océan Arctique:1,Mer Méditerranée:1,Mer Rouge:2,Mer Noire:2,Mer du Nord:2,Mer Baltique:2,Mer de Glace:-5"],
+["Géographie","pays d’Europe hors Union européenne","Suisse:1,Norvège:1,Royaume-Uni:1,Islande:2,Serbie:2,Ukraine:2,Albanie:2,Moldavie:5,Liechtenstein:5,Belgique:-5"],
+["Sport","pays qui ont accueilli les Jeux olympiques d’hiver","France:1,Norvège:1,Suisse:1,Italie:1,États-Unis:1,Canada:2,Japon:2,Autriche:2,Allemagne:2,Brésil:-5"],
+["Sport","joueurs de basket célèbres","Michael Jordan:1,LeBron James:1,Kobe Bryant:1,Stephen Curry:1,Shaquille O’Neal:2,Magic Johnson:2,Larry Bird:2,Victor Wembanyama:2,Tony Parker:5,Cristiano Ronaldo:-5"],
+["Sport","pilotes de moto ou de rallye","Valentino Rossi:1,Marc Márquez:1,Sébastien Loeb:1,Sébastien Ogier:2,Casey Stoner:2,Jorge Lorenzo:2,Fabio Quartararo:2,Mick Doohan:5,Kevin Schwantz:5,Lewis Hamilton:-5"],
+["Sport","athlètes olympiques célèbres","Usain Bolt:1,Michael Phelps:1,Simone Biles:1,Carl Lewis:2,Teddy Riner:2,Léon Marchand:2,Florent Manaudou:2,Marie-José Pérec:2,Jesse Owens:5,Zinedine Zidane:-5"],
+["Sport","équipements de sport","Raquette:1,Ballon:1,Filet:1,Casque:1,Gants de boxe:1,Maillot:1,Chronomètre:2,Haltères:2,Corde à sauter:2,Aspirateur:-5"],
+["Football","joueurs de l’équipe de France de 2018","Mbappé:1,Griezmann:1,Pogba:1,Kanté:1,Lloris:1,Varane:2,Giroud:2,Umtiti:2,Matuidi:5,Benzema:-5"],
+["Football","pays africains qui ont joué une Coupe du monde","Maroc:1,Sénégal:1,Cameroun:1,Nigeria:1,Ghana:2,Côte d’Ivoire:2,Algérie:2,Tunisie:2,Égypte:2,Kenya:-5"],
+["Football","attaquants célèbres","Pelé:1,Maradona:1,Ronaldo Nazário:1,Thierry Henry:1,Mbappé:1,Haaland:2,Lewandowski:2,Suárez:2,Van Basten:5,Buffon:-5"],
+["Football","clubs de football sud-américains","Boca Juniors:1,River Plate:1,Flamengo:1,Palmeiras:2,Santos:2,Corinthians:2,Peñarol:2,Independiente:5,Colo-Colo:5,Real Madrid:-5"],
+["Football","légendes de l’équipe de France","Platini:1,Zidane:1,Henry:1,Deschamps:1,Kopa:2,Fontaine:2,Papin:2,Cantona:2,Vieira:5,Eusébio:-5"],
+["Divertissement","films d’animation DreamWorks","Shrek:1,Madagascar:1,Kung Fu Panda:1,Dragons:2,Les Croods:2,Megamind:2,Le Chat potté:2,Baby Boss:2,Le Prince d’Égypte:5,Toy Story:-5"],
+["Divertissement","personnages de Star Wars","Luke Skywalker:1,Dark Vador:1,Yoda:1,Leia:1,Han Solo:1,Obi-Wan Kenobi:2,Chewbacca:2,R2-D2:2,Palpatine:5,Spock:-5"],
+["Divertissement","grands méchants du cinéma","Joker:1,Thanos:1,Voldemort:1,Loki:2,Magnéto:2,Sauron:2,Cruella:2,Scar:2,Jafar:5,Winnie l’ourson:-5"],
+["Divertissement","animaux de dessins animés","Mickey:1,Bugs Bunny:1,Donald:1,Garfield:1,Dumbo:2,Bambi:2,Tom:2,Jerry:2,Scooby-Doo:5,Lara Croft:-5"],
+["Divertissement","sagas de films","Harry Potter:1,Star Wars:1,Le Seigneur des anneaux:1,Jurassic Park:1,Fast & Furious:1,Matrix:2,Pirates des Caraïbes:2,Indiana Jones:2,Rocky:5,Titanic:-5"],
+["Gastronomie","pains ou viennoiseries","Baguette:1,Croissant:1,Pain au chocolat:1,Brioche:1,Pain de campagne:2,Pain aux raisins:2,Chausson aux pommes:2,Fougasse:2,Kouign-amann:5,Pizza:-5"],
+["Gastronomie","boissons sans alcool","Eau:1,Coca-Cola:1,Jus d’orange:1,Thé:1,Café:1,Limonade:2,Sirop:2,Lait:2,Smoothie:2,Vin:-5"],
+["Gastronomie","poissons ou fruits de mer","Saumon:1,Thon:1,Crevette:1,Moule:1,Huître:1,Homard:2,Crabe:2,Sardine:2,Calamar:2,Poulet:-5"],
+["Gastronomie","agrumes","Orange:1,Citron:1,Mandarine:1,Pamplemousse:1,Clémentine:1,Citron vert:2,Cédrat:5,Bergamote:5,Kumquat:5,Pêche:-5"],
+["Gastronomie","produits laitiers","Lait:1,Yaourt:1,Fromage:1,Beurre:1,Crème fraîche:1,Fromage blanc:2,Skyr:2,Ricotta:2,Kéfir:5,Huile d’olive:-5"],
+["Histoire","monarques britanniques","Elizabeth II:1,Victoria:1,Henri VIII:1,Élisabeth Ire:1,Charles III:2,George III:2,Richard Cœur de Lion:2,Guillaume le Conquérant:2,Édouard VII:5,Louis XIV:-5"],
+["Histoire","personnages de la Seconde Guerre mondiale","Churchill:1,Hitler:1,Staline:1,Roosevelt:1,De Gaulle:1,Mussolini:2,Eisenhower:2,Rommel:2,Montgomery:5,Napoléon:-5"],
+["Histoire","merveilles du monde anciennes ou nouvelles","Pyramide de Khéops:1,Grande Muraille de Chine:1,Colisée:1,Machu Picchu:1,Taj Mahal:1,Pétra:2,Christ Rédempteur:2,Chichén Itzá:2,Jardins suspendus de Babylone:5,Tour Eiffel:-5"],
+["Histoire","grandes inventions de l’histoire","Imprimerie:1,Roue:1,Électricité:1,Téléphone:1,Ampoule électrique:1,Poudre à canon:2,Boussole:2,Vaccin:2,Machine à vapeur:2,Smartphone:-5"],
+["Histoire","philosophes célèbres","Platon:1,Aristote:1,Socrate:1,Descartes:1,Voltaire:1,Rousseau:2,Nietzsche:2,Kant:2,Sartre:2,Einstein:-5"],
+["Science","métaux","Fer:1,Or:1,Argent:1,Cuivre:1,Aluminium:1,Zinc:2,Plomb:2,Étain:2,Platine:5,Carbone:-5"],
+["Science","animaux de la forêt","Cerf:1,Sanglier:1,Renard:1,Écureuil:1,Loup:2,Ours:2,Chevreuil:2,Blaireau:2,Lynx:5,Dauphin:-5"],
+["Science","reptiles ou amphibiens","Crocodile:1,Serpent:1,Tortue:1,Lézard:1,Grenouille:1,Salamandre:2,Caméléon:2,Iguane:2,Gecko:5,Souris:-5"],
+["Science","insectes","Fourmi:1,Abeille:1,Mouche:1,Moustique:1,Papillon:1,Coccinelle:2,Libellule:2,Guêpe:2,Scarabée:5,Araignée:-5"],
+["Science","phénomènes météo","Pluie:1,Neige:1,Orage:1,Brouillard:1,Vent:1,Grêle:2,Tempête:2,Canicule:2,Tornade:2,Séisme:-5"],
+["Religion","fêtes de l’année chrétienne","Noël:1,Pâques:1,Pentecôte:1,Carême:1,Avent:2,Ascension:2,Épiphanie:2,Toussaint:2,Assomption:5,Ramadan:-5"],
+["Religion","femmes de la Bible","Ève:1,Marie:1,Sarah:1,Marie-Madeleine:1,Ruth:2,Esther:2,Rebecca:2,Déborah:5,Bethsabée:5,Cléopâtre:-5"],
+["Religion","paraboles de Jésus","Le Bon Samaritain:1,Le Fils prodigue:1,Le Semeur:1,La Brebis perdue:2,Le Grain de sénevé:2,Les Talents:2,Les Dix Vierges:2,Le Bon Berger:2,Les Ouvriers de la vigne:5,Le Déluge:-5"],
+["Religion","prophètes de la Bible","Moïse:1,Élie:1,Isaïe:1,Jonas:1,Jérémie:2,Ézéchiel:2,Daniel:2,Samuel:2,Amos:5,Judas:-5"],
+["Religion","saints célèbres","François d’Assise:1,Nicolas:1,Patrick:1,Valentin:1,Jeanne d’Arc:1,Thomas d’Aquin:2,Antoine de Padoue:2,Augustin:2,Ignace de Loyola:5,Bouddha:-5"],
+["Égypte","animaux de l’Égypte antique","Chat:1,Crocodile:1,Hippopotame:1,Scarabée:1,Faucon:2,Ibis:2,Cobra:2,Chacal:2,Scorpion:5,Panda:-5"],
+["Égypte","noms liés à l’égyptologie","Champollion:1,Howard Carter:1,Pierre de Rosette:1,Auguste Mariette:2,Napoléon Bonaparte:2,Lord Carnarvon:2,Flinders Petrie:5,Zahi Hawass:5,Giovanni Belzoni:5,Indiana Jones:-5"],
+["Égypte","pyramides d’Égypte","Khéops:1,Khéphren:1,Mykérinos:1,Pyramide à degrés:2,Pyramide rouge:2,Pyramide rhomboïdale:2,Meïdoum:5,Unas:5,Teti:5,Pyramide du Louvre:-5"],
+["Égypte","aliments de base en Égypte","Pain:1,Fèves:1,Riz:1,Thé:1,Dattes:1,Lentilles:2,Oignon:2,Aubergine:2,Hibiscus:5,Choucroute:-5"],
+["Égypte","autres divinités égyptiennes","Amon:1,Ptah:1,Sobek:1,Sekhmet:1,Nout:2,Geb:2,Maât:2,Khnoum:5,Aton:5,Odin:-5"],
+["Musique","groupes ou artistes français","Daft Punk:1,Indochine:1,Téléphone:1,Noir Désir:2,Les Rita Mitsouko:2,Gojira:2,Air:2,Phoenix:5,Justice:5,Oasis:-5"],
+["Musique","artistes ou groupes de K-pop","BTS:1,Blackpink:1,PSY:1,Twice:2,Stray Kids:2,EXO:2,NewJeans:2,Seventeen:5,Big Bang:5,Coldplay:-5"],
+["Musique","légendes de la musique américaine","Elvis Presley:1,Michael Jackson:1,Frank Sinatra:1,Bob Dylan:2,Prince:2,Johnny Cash:2,Stevie Wonder:2,Aretha Franklin:2,Ray Charles:5,Édith Piaf:-5"],
+["Musique","genres musicaux","Rock:1,Pop:1,Rap:1,Jazz:1,Blues:1,Reggae:2,Électro:2,Country:2,Funk:2,Sculpture:-5"],
+["Musique","instruments à clavier ou à percussion","Piano:1,Batterie:1,Orgue:1,Tambour:1,Xylophone:2,Timbales:2,Maracas:2,Synthétiseur:2,Clavecin:5,Harpe:-5"],
+["Tech","logiciels de bureautique ou de travail","Word:1,Excel:1,PowerPoint:1,Outlook:2,Google Docs:2,Teams:2,Zoom:2,Notion:5,Slack:5,Minecraft:-5"],
+["Tech","assistants ou IA célèbres","ChatGPT:1,Siri:1,Alexa:1,Google Assistant:2,Claude:2,Gemini:2,Copilot:2,Cortana:5,Bixby:5,Wikipédia:-5"],
+["Tech","constructeurs automobiles","Peugeot:1,Renault:1,Citroën:1,Toyota:1,Volkswagen:1,BMW:2,Ferrari:2,Tesla:2,Dacia:2,Boeing:-5"],
+["Tech","pièces d’un ordinateur","Processeur:1,Écran:1,Clavier:1,Souris:1,Disque dur:1,Carte mère:2,Mémoire RAM:2,Carte graphique:2,Alimentation:5,Moteur:-5"],
+["Tech","fondateurs ou pionniers de la tech","Steve Jobs:1,Bill Gates:1,Elon Musk:1,Mark Zuckerberg:1,Jeff Bezos:2,Larry Page:2,Sergey Brin:2,Linus Torvalds:5,Tim Berners-Lee:5,Walt Disney:-5"],
+["Spécialités","spécialités indiennes","Poulet tikka:1,Naan:1,Biryani:1,Samoussa:1,Dal:2,Tandoori:2,Chutney:2,Paneer:5,Lassi:5,Choucroute:-5"],
+["Spécialités","spécialités du Maghreb","Couscous:1,Tajine:1,Harira:1,Merguez:1,Pastilla:2,Méchoui:2,Chakchouka:2,Msemen:5,Rfissa:5,Raclette:-5"],
+["Spécialités","spécialités américaines","Hamburger:1,Hot-dog:1,Pancakes:1,Barbecue:1,Donuts:1,Mac and cheese:2,Cheesecake:2,Brownie:2,Clam chowder:5,Fondue:-5"],
+["Spécialités","spécialités britanniques ou irlandaises","Fish and chips:1,Scones:1,Full English breakfast:1,Shepherd’s pie:2,Haggis:2,Yorkshire pudding:2,Irish stew:2,Cornish pasty:5,Bangers and mash:5,Couscous:-5"],
+["Spécialités","spécialités d’Asie du Sud-Est","Pho:1,Nasi goreng:1,Satay:1,Rendang:2,Tom yum:2,Laksa:2,Banh mi:2,Amok:5,Adobo:5,Kimchi:-5"],
+["Culture générale","choses qui ont des roues","Voiture:1,Vélo:1,Moto:1,Camion:1,Trottinette:1,Skateboard:2,Poussette:2,Valise:2,Caddie:2,Bateau:-5"],
+["Culture générale","choses qui brillent","Soleil:1,Étoile:1,Lune:1,Diamant:1,Or:1,Ampoule:2,Miroir:2,Feu d’artifice:2,Luciole:5,Charbon:-5"],
+["Culture générale","choses qu’on mange au petit-déjeuner","Café:1,Croissant:1,Tartine:1,Céréales:1,Jus d’orange:1,Confiture:2,Œuf:2,Yaourt:2,Pancakes:5,Pot-au-feu:-5"],
+["Culture générale","métiers","Médecin:1,Professeur:1,Boulanger:1,Pompier:1,Policier:1,Plombier:2,Électricien:2,Avocat:2,Architecte:2,Super-héros:-5"],
+["Culture générale","moyens de transport","Voiture:1,Train:1,Avion:1,Bus:1,Métro:1,Vélo:2,Bateau:2,Tramway:2,Téléphérique:5,Fauteuil:-5"],
+["Mèmes","émojis populaires","Visage qui rit aux larmes:1,Cœur rouge:1,Pouce levé:1,Feu:1,Mains jointes:2,Crâne:2,Visage qui pleure:2,Étoile:2,Fusée:5,Fax:-5"],
+["Mèmes","jeux en ligne ou mobiles populaires","Clash of Clans:1,Clash Royale:1,Subway Surfers:1,Angry Birds:1,Brawl Stars:2,Genshin Impact:2,League of Legends:2,Valorant:2,Counter-Strike:5,Uno:-5"],
+["Mèmes","animés cultes","Naruto:1,One Piece:1,Dragon Ball:1,L’Attaque des Titans:2,Death Note:2,My Hero Academia:2,Demon Slayer:2,Jujutsu Kaisen:2,Bleach:5,Les Simpson:-5"],
+["Mèmes","personnages de jeux vidéo célèbres","Mario:1,Sonic:1,Pikachu:1,Link:1,Kirby:2,Pac-Man:2,Lara Croft:2,Master Chief:5,Crash Bandicoot:5,Mickey:-5"],
+["Mèmes","plateformes de musique en ligne","Spotify:1,Deezer:1,Apple Music:1,SoundCloud:2,YouTube Music:2,Amazon Music:2,Tidal:5,Napster:5,Bandcamp:5,Netflix:-5"],
+["Géographie","pays d’Europe du Sud","Espagne:1,Italie:1,Grèce:1,Portugal:1,Malte:2,Croatie:2,Albanie:2,Chypre:2,Saint-Marin:5,Finlande:-5"],
+["Géographie","îles célèbres du monde","Madagascar:1,Cuba:1,Islande:1,Sicile:1,Bali:2,Hawaï:2,Maurice:2,Sri Lanka:2,Zanzibar:5,Suisse:-5"],
+["Géographie","volcans célèbres","Vésuve:1,Etna:1,Fuji:1,Krakatoa:2,Stromboli:2,Kilimandjaro:2,Piton de la Fournaise:2,Eyjafjöll:5,Mauna Loa:5,Everest:-5"],
+["Sport","disciplines de la gymnastique","Sol:1,Poutre:1,Barre fixe:1,Anneaux:1,Saut de cheval:1,Barres parallèles:2,Cheval d’arçons:2,Trampoline:2,Gymnastique rythmique:5,Slalom:-5"],
+["Sport","clubs de basket NBA","Los Angeles Lakers:1,Chicago Bulls:1,Boston Celtics:1,Golden State Warriors:1,Miami Heat:2,New York Knicks:2,San Antonio Spurs:2,Brooklyn Nets:2,Toronto Raptors:5,PSG:-5"],
+["Sport","grandes nations du rugby","France:1,Angleterre:1,Irlande:1,Pays de Galles:1,Écosse:1,Italie:2,Nouvelle-Zélande:2,Afrique du Sud:2,Australie:2,Islande:-5"],
+["Football","joueurs brésiliens célèbres","Pelé:1,Ronaldo:1,Ronaldinho:1,Neymar:1,Kaká:2,Romário:2,Zico:2,Rivaldo:2,Cafu:5,Maradona:-5"],
+["Football","joueurs argentins célèbres","Maradona:1,Messi:1,Di María:2,Batistuta:2,Agüero:2,Riquelme:2,Tevez:2,Mascherano:5,Zanetti:5,Pelé:-5"],
+["Football","clubs vainqueurs de la Ligue des champions","Real Madrid:1,AC Milan:1,Liverpool:1,Bayern Munich:1,FC Barcelone:1,Manchester United:2,Inter Milan:2,Chelsea:2,Ajax:2,Arsenal:-5"],
+["Divertissement","séries cultes","Friends:1,Game of Thrones:1,Breaking Bad:1,Lost:2,Prison Break:2,The Walking Dead:2,How I Met Your Mother:2,Dr House:5,Dexter:5,Titanic:-5"],
+["Divertissement","comédies françaises cultes","Les Visiteurs:1,Intouchables:1,La Grande Vadrouille:1,Bienvenue chez les Ch’tis:1,Le Dîner de cons:2,Taxi:2,Les Tuche:2,OSS 117:5,Le Père Noël est une ordure:5,Pulp Fiction:-5"],
+["Divertissement","BD franco-belges célèbres","Tintin:1,Astérix:1,Lucky Luke:1,Spirou:2,Les Schtroumpfs:2,Gaston Lagaffe:2,Boule et Bill:2,Blake et Mortimer:5,Titeuf:5,Superman:-5"],
+["Gastronomie","boissons alcoolisées","Vin:1,Bière:1,Whisky:1,Vodka:1,Champagne:1,Rhum:2,Tequila:2,Cidre:2,Pastis:5,Limonade:-5"],
+["Gastronomie","fruits à coque ou fruits secs","Amande:1,Noix:1,Noisette:1,Cacahuète:1,Pistache:1,Noix de cajou:2,Noix de pécan:2,Noix de macadamia:5,Raisin sec:2,Pomme:-5"],
+["Gastronomie","sandwichs ou plats de fast-food","Hamburger:1,Kebab:1,Panini:1,Croque-monsieur:1,Hot-dog:1,Tacos:2,Burrito:2,Bagel:2,Wrap:2,Pot-au-feu:-5"],
+["Histoire","villes de l’Antiquité","Rome:1,Athènes:1,Sparte:1,Troie:2,Carthage:2,Babylone:2,Pompéi:2,Alexandrie:2,Persépolis:5,Berlin:-5"],
+["Histoire","présidents de la République française","De Gaulle:1,Pompidou:1,Giscard d’Estaing:1,Mitterrand:1,Chirac:1,Sarkozy:1,Hollande:1,Macron:1,Poincaré:5,Churchill:-5"],
+["Histoire","inventeurs célèbres","Edison:1,Graham Bell:1,Gutenberg:1,Frères Lumière:1,Frères Wright:1,Marconi:2,Tesla:2,Benz:2,Diesel:5,Michel-Ange:-5"],
+["Science","mammifères","Chien:1,Chat:1,Cheval:1,Vache:1,Dauphin:1,Éléphant:1,Baleine:2,Chauve-souris:2,Ornithorynque:5,Autruche:-5"],
+["Science","parties du corps humain","Tête:1,Bras:1,Jambe:1,Main:1,Pied:1,Genou:2,Coude:2,Épaule:2,Nuque:5,Aile:-5"],
+["Science","arbres","Chêne:1,Pin:1,Sapin:1,Érable:1,Bouleau:2,Hêtre:2,Platane:2,Peuplier:2,Cèdre:5,Tulipe:-5"],
+["Religion","livres du Nouveau Testament","Matthieu:1,Marc:1,Luc:1,Jean:1,Apocalypse:1,Actes des Apôtres:2,Épître aux Romains:2,Hébreux:5,Jacques:5,Genèse:-5"],
+["Religion","objets ou symboles chrétiens","Croix:1,Bible:1,Crucifix:1,Chapelet:1,Hostie:2,Calice:2,Cierge:2,Eau bénite:2,Missel:5,Étoile de David:-5"],
+["Égypte","symboles de l’Égypte antique","Ankh:1,Œil d’Horus:1,Scarabée:1,Cartouche:2,Pilier djed:2,Lotus:2,Uræus:2,Nœud d’Isis:5,Plume de Maât:5,Trèfle:-5"],
+["Musique","chanteuses françaises","Édith Piaf:1,Dalida:1,Mylène Farmer:1,Zaz:2,Angèle:2,Vanessa Paradis:2,Françoise Hardy:2,Jenifer:5,Camille:5,Adele:-5"],
+["Musique","artistes ou groupes des années 90","Nirvana:1,Spice Girls:1,Backstreet Boys:1,Oasis:1,Céline Dion:1,Eminem:2,Radiohead:2,Blur:5,Aqua:5,The Beatles:-5"],
+["Musique","instruments traditionnels du monde","Sitar:1,Didgeridoo:1,Oud:1,Djembé:1,Kora:2,Cornemuse:2,Balalaïka:2,Shamisen:5,Bouzouki:5,Guitare électrique:-5"],
+["Tech","langages ou technologies du web","HTML:1,CSS:1,JavaScript:1,PHP:2,React:2,Node.js:2,Angular:5,Vue:5,TypeScript:5,Windows:-5"],
+["Tech","produits Apple","iPhone:1,iPad:1,MacBook:1,Apple Watch:1,AirPods:1,iPod:2,iMac:2,Apple TV:2,Vision Pro:5,Galaxy:-5"],
+["Tech","sites de vente en ligne","Amazon:1,eBay:1,Vinted:1,Leboncoin:1,AliExpress:1,Etsy:2,Zalando:2,Cdiscount:2,Shein:5,WhatsApp:-5"],
+["Spécialités","spécialités allemandes ou d’Europe centrale","Bretzel:1,Currywurst:1,Choucroute:1,Schnitzel:1,Strudel:2,Goulash:2,Spätzle:2,Pierogi:2,Sachertorte:5,Tajine:-5"],
+["Spécialités","spécialités grecques ou turques","Kebab:1,Baklava:1,Moussaka:1,Tzatziki:1,Souvlaki:2,Gyros:2,Börek:2,Lokum:5,Dolma:5,Paella:-5"],
+["Spécialités","spécialités japonaises","Sushi:1,Ramen:1,Tempura:1,Okonomiyaki:2,Takoyaki:2,Yakitori:2,Mochi:2,Onigiri:2,Udon:5,Tacos:-5"],
+["Culture générale","choses qu’on trouve dans un jardin","Arbre:1,Fleur:1,Pelouse:1,Tondeuse:1,Arrosoir:1,Barbecue:2,Banc:2,Râteau:2,Épouvantail:5,Aquarium:-5"],
+["Culture générale","choses froides","Glace:1,Neige:1,Glaçon:1,Frigo:1,Congélateur:1,Igloo:2,Iceberg:2,Banquise:2,Pôle Nord:5,Volcan:-5"],
+["Culture générale","choses qu’on porte aux pieds","Chaussures:1,Chaussettes:1,Baskets:1,Sandales:1,Bottes:1,Tongs:2,Pantoufles:2,Chaussons:2,Sabots:5,Écharpe:-5"],
+["Mèmes","applications de messagerie","WhatsApp:1,Messenger:1,Telegram:1,Snapchat:1,Signal:2,iMessage:2,Viber:2,WeChat:2,Line:5,Photoshop:-5"],
+["Mèmes","plateformes de jeux vidéo","Steam:1,Epic Games Store:1,PlayStation Store:1,Xbox Game Pass:2,Battle.net:2,Origin:2,Nintendo eShop:2,GOG:5,itch.io:5,Spotify:-5"],
+["Mèmes","marques de sneakers ou de streetwear","Nike:1,Adidas:1,Puma:1,Vans:1,Converse:1,Supreme:2,New Balance:2,Reebok:2,Off-White:5,Peugeot:-5"],
+["Géographie","capitales d’Europe de l’Est","Varsovie:1,Prague:1,Budapest:1,Bucarest:2,Sofia:2,Belgrade:2,Vilnius:2,Riga:5,Tallinn:5,Lisbonne:-5"],
+["Géographie","villes des États-Unis","New York:1,Los Angeles:1,Chicago:1,Miami:1,San Francisco:1,Las Vegas:2,Boston:2,Seattle:2,Houston:2,Toronto:-5"],
+["Sport","compétitions sportives célèbres","Coupe du monde:1,Jeux olympiques:1,Roland-Garros:1,Wimbledon:1,Tour de France:1,Super Bowl:2,Championnat d’Europe:2,Coupe Davis:5,Ryder Cup:5,Oscars:-5"],
+["Sport","sports de plein air","Randonnée:1,Escalade:1,Course à pied:1,Cyclisme:1,Ski:1,Kayak:2,Parapente:2,Alpinisme:2,Trail:5,Bowling:-5"],
+["Football","légendes du FC Barcelone","Messi:1,Xavi:1,Iniesta:1,Ronaldinho:1,Cruyff:2,Puyol:2,Eto’o:2,Suárez:2,Piqué:2,Cristiano Ronaldo:-5"],
+["Football","légendes du Real Madrid","Cristiano Ronaldo:1,Zidane:1,Raúl:1,Benzema:1,Di Stéfano:2,Casillas:2,Modrić:2,Ramos:2,Roberto Carlos:2,Messi:-5"],
+["Divertissement","films Marvel","Avengers:1,Iron Man:1,Black Panther:1,Thor:2,Captain America:2,Les Gardiens de la Galaxie:2,Doctor Strange:2,Ant-Man:5,Eternals:5,The Dark Knight:-5"],
+["Divertissement","personnages de Mario","Mario:1,Luigi:1,Peach:1,Bowser:1,Yoshi:1,Toad:2,Wario:2,Donkey Kong:2,Waluigi:5,Sonic:-5"],
+["Gastronomie","légumes racines ou tubercules","Pomme de terre:1,Carotte:1,Patate douce:1,Betterave:2,Navet:2,Radis:2,Céleri-rave:5,Manioc:5,Topinambour:5,Salade:-5"],
+["Gastronomie","boissons chaudes","Café:1,Thé:1,Chocolat chaud:1,Tisane:1,Cappuccino:2,Expresso:2,Latte:2,Chai:5,Matcha:5,Soda:-5"],
+["Histoire","personnages de l’Empire romain","Jules César:1,Auguste:1,Néron:1,Caligula:1,Marc Aurèle:2,Hadrien:2,Constantin:2,Trajan:2,Vespasien:5,Alexandre le Grand:-5"],
+["Histoire","Premiers ministres britanniques","Churchill:1,Thatcher:1,Blair:1,Boris Johnson:1,David Cameron:2,Attlee:2,John Major:2,Theresa May:2,Keir Starmer:5,Macron:-5"],
+["Science","lunes du système solaire","Lune:1,Titan:1,Phobos:2,Deimos:2,Io:2,Europa:2,Ganymède:2,Callisto:2,Triton:5,Soleil:-5"],
+["Science","inventions ou outils médicaux","Vaccin:1,Pénicilline:1,Stéthoscope:1,Radiographie:1,Thermomètre:1,Scanner:2,IRM:2,Défibrillateur:2,Pacemaker:5,Télescope:-5"],
+["Religion","rois de la Bible","David:1,Salomon:1,Saül:1,Hérode:2,Achab:2,Nabuchodonosor:2,Josias:5,Ézéchias:5,Roboam:5,Charlemagne:-5"],
+["Religion","récits du livre de la Genèse","Création:1,Caïn et Abel:1,Arche de Noé:1,Tour de Babel:1,Sodome et Gomorrhe:2,Sacrifice d’Isaac:2,Jacob et Ésaü:2,Joseph vendu par ses frères:2,Songe de l’échelle de Jacob:5,Passage de la mer Rouge:-5"],
+["Égypte","personnages bibliques liés à l’Égypte","Moïse:1,Joseph:1,Pharaon:1,Aaron:2,Miriam:2,Jacob:2,Marie:2,Jésus:2,Potiphar:5,Cléopâtre:-5"],
+["Égypte","sites à visiter lors d’une croisière sur le Nil","Louxor:1,Assouan:1,Edfou:2,Kom Ombo:2,Abou Simbel:2,Philae:2,Esna:5,Dendérah:5,Abydos:5,Marrakech:-5"],
+["Musique","groupes de rock des années 2000","Coldplay:1,Muse:1,Arctic Monkeys:1,Linkin Park:1,Green Day:2,The Strokes:2,Foo Fighters:2,Kings of Leon:5,Franz Ferdinand:5,Frank Sinatra:-5"],
+["Musique","artistes latino","Shakira:1,Ricky Martin:1,Enrique Iglesias:1,Bad Bunny:1,J Balvin:2,Daddy Yankee:2,Luis Fonsi:2,Maluma:2,Marc Anthony:5,Eminem:-5"],
+["Tech","services Google","Gmail:1,Google Maps:1,Chrome:1,YouTube:1,Android:1,Google Drive:2,Google Photos:2,Google Traduction:2,Google Meet:5,iCloud:-5"],
+["Tech","câbles ou connectiques","USB:1,HDMI:1,Ethernet:1,USB-C:1,Jack:2,Lightning:2,VGA:2,DisplayPort:5,Thunderbolt:5,Wi-Fi:-5"],
+["Spécialités","spécialités coréennes","Kimchi:1,Bibimbap:1,Bulgogi:1,Tteokbokki:2,Japchae:2,Kimbap:2,Samgyeopsal:2,Naengmyeon:5,Sundubu-jjigae:5,Sushi:-5"],
+["Spécialités","ingrédients de la cuisine française","Beurre:1,Crème:1,Farine:1,Œuf:1,Ail:1,Échalote:2,Moutarde:2,Vin blanc:2,Estragon:5,Wasabi:-5"],
+["Culture générale","objets dans une chambre","Lit:1,Armoire:1,Oreiller:1,Couette:1,Réveil:1,Lampe:2,Tapis:2,Rideaux:2,Commode:2,Réfrigérateur:-5"],
+["Culture générale","choses qui volent","Avion:1,Oiseau:1,Hélicoptère:1,Drone:1,Papillon:1,Cerf-volant:2,Fusée:2,Abeille:2,Montgolfière:2,Voiture:-5"],
+["Mèmes","termes des réseaux sociaux","Like:1,Hashtag:1,Story:1,Reel:1,Abonné:1,Live:2,Duo:2,Filtre:2,Algorithme:5,Télécopie:-5"],
+["Mèmes","éléments de Minecraft","Creeper:1,Zombie:1,Squelette:1,Diamant:1,Enderman:2,Redstone:2,Villageois:2,Pioche:2,Ender Dragon:5,Pikachu:-5"]
+].forEach(function(e){DATA.push([e[0],"Citez 9 "+e[1],e[2]])});
+Object.assign(TR.en,{
+"Citez 9 dieux de l’Égypte antique":["Name 9 gods of ancient Egypt","Ra:1,Anubis:1,Osiris:1,Isis:1,Horus:1,Set:2,Thoth:2,Bastet:2,Hathor:2,Zeus:-5"],
+"Citez 9 villes d’Égypte":["Name 9 cities in Egypt","Cairo:1,Alexandria:1,Luxor:1,Aswan:1,Giza:1,Sharm El Sheikh:2,Hurghada:2,Port Said:2,Suez:2,Casablanca:-5"],
+"Citez 9 pharaons ou reines d’Égypte":["Name 9 pharaohs or queens of Egypt","Tutankhamun:1,Ramesses II:1,Cleopatra:1,Khufu:1,Nefertiti:2,Hatshepsut:2,Akhenaten:2,Djoser:5,Thutmose III:5,Julius Caesar:-5"],
+"Citez 9 apôtres de Jésus":["Name 9 apostles of Jesus","Peter:1,John:1,James:1,Matthew:1,Thomas:1,Judas Iscariot:1,Andrew:2,Philip:2,Bartholomew:5,Paul:-5"],
+"Citez 9 personnages de l’Ancien Testament":["Name 9 Old Testament figures","Adam:1,Eve:1,Noah:1,Abraham:1,Moses:1,David:1,Solomon:2,Daniel:2,Joseph:2,Peter:-5"],
+"Citez 9 livres de la Bible":["Name 9 books of the Bible","Genesis:1,Exodus:1,Psalms:1,Matthew:1,John:1,Revelation:1,Proverbs:2,Isaiah:2,Leviticus:5,Quran:-5"],
+"Citez 9 instruments à cordes":["Name 9 string instruments","Guitar:1,Violin:1,Cello:1,Harp:1,Double bass:2,Banjo:2,Ukulele:2,Mandolin:2,Sitar:5,Trumpet:-5"],
+"Citez 9 consoles de jeux vidéo":["Name 9 video game consoles","PlayStation 5:1,Xbox Series X:1,Nintendo Switch:1,Wii:1,PlayStation 2:1,Game Boy:2,Mega Drive:2,Super Nintendo:2,Atari 2600:5,iPad:-5"],
+"Citez 9 applications de réseaux sociaux":["Name 9 social media apps","TikTok:1,Instagram:1,Snapchat:1,YouTube:1,Facebook:1,Pinterest:2,Twitch:2,Reddit:2,Discord:5,Excel:-5"],
+"Citez 9 choses qu’on trouve dans une salle de bain":["Name 9 things found in a bathroom","Soap:1,Toothbrush:1,Toothpaste:1,Towel:1,Shampoo:1,Shower:2,Bathtub:2,Mirror:2,Razor:2,Oven:-5"],
+"Citez 9 ingrédients de la cuisine mexicaine":["Name 9 Mexican cooking ingredients","Corn:1,Beans:1,Chili pepper:1,Avocado:1,Tomato:1,Cilantro:2,Lime:2,Cacao:5,Nopal:5,Curry:-5"],
+"Citez 9 rappeurs ou rappeuses":["Name 9 rappers","Eminem:1,Jay-Z:1,Drake:1,Kendrick Lamar:1,Nicki Minaj:2,Snoop Dogg:2,Booba:2,Nekfeu:2,Orelsan:5,Ed Sheeran:-5"]});
+Object.assign(TR.ar,{
+"Citez 9 dieux de l’Égypte antique":["اذكر 9 آلهة من مصر القديمة","رع:1,أنوبيس:1,أوزيريس:1,إيزيس:1,حورس:1,ست:2,تحوت:2,باستست:2,حتحور:2,زيوس:-5"],
+"Citez 9 villes d’Égypte":["اذكر 9 مدن في مصر","القاهرة:1,الإسكندرية:1,الأقصر:1,أسوان:1,الجيزة:1,شرم الشيخ:2,الغردقة:2,بورسعيد:2,السويس:2,الدار البيضاء:-5"],
+"Citez 9 pharaons ou reines d’Égypte":["اذكر 9 فراعنة أو ملكات مصر","توت عنخ آمون:1,رمسيس الثاني:1,كليوباترا:1,خوفو:1,نفرتيتي:2,حتشبسوت:2,إخناتون:2,زوسر:5,تحتمس الثالث:5,يوليوس قيصر:-5"],
+"Citez 9 apôtres de Jésus":["اذكر 9 من رسل المسيح","بطرس:1,يوحنا:1,يعقوب:1,متى:1,توما:1,يهوذا الإسخريوطي:1,أندراوس:2,فيلبس:2,برثولماوس:5,بولس:-5"],
+"Citez 9 personnages de l’Ancien Testament":["اذكر 9 شخصيات من العهد القديم","آدم:1,حواء:1,نوح:1,إبراهيم:1,موسى:1,داود:1,سليمان:2,دانيال:2,يوسف:2,بطرس:-5"],
+"Citez 9 livres de la Bible":["اذكر 9 أسفار من الكتاب المقدس","التكوين:1,الخروج:1,المزامير:1,متى:1,يوحنا:1,الرؤيا:1,الأمثال:2,إشعياء:2,اللاويين:5,القرآن:-5"],
+"Citez 9 instruments à cordes":["اذكر 9 آلات وترية","غيتار:1,كمان:1,تشيلو:1,قيثارة:1,كونترباص:2,بانجو:2,أوكوليلي:2,مندولين:2,سيتار:5,بوق:-5"],
+"Citez 9 consoles de jeux vidéo":["اذكر 9 أجهزة ألعاب فيديو","بلايستيشن 5:1,إكس بوكس سيريس إكس:1,نينتندو سويتش:1,وي:1,بلايستيشن 2:1,غيم بوي:2,ميغا درايف:2,سوبر نينتندو:2,أتاري 2600:5,آيباد:-5"],
+"Citez 9 applications de réseaux sociaux":["اذكر 9 تطبيقات تواصل اجتماعي","تيك توك:1,إنستغرام:1,سناب شات:1,يوتيوب:1,فيسبوك:1,بنترست:2,تويتش:2,ريديت:2,ديسكورد:5,إكسل:-5"],
+"Citez 9 choses qu’on trouve dans une salle de bain":["اذكر 9 أشياء توجد في الحمام","صابون:1,فرشاة أسنان:1,معجون أسنان:1,منشفة:1,شامبو:1,دش:2,حوض استحمام:2,مرآة:2,شفرة حلاقة:2,فرن:-5"],
+"Citez 9 ingrédients de la cuisine mexicaine":["اذكر 9 مكونات من المطبخ المكسيكي","ذرة:1,فاصوليا:1,فلفل حار:1,أفوكادو:1,طماطم:1,كزبرة:2,ليمون أخضر:2,كاكاو:5,صبار النوبال:5,كاري:-5"],
+"Citez 9 rappeurs ou rappeuses":["اذكر 9 مغنّي راب","إيمينيم:1,جاي زي:1,دريك:1,كيندريك لامار:1,نيكي ميناج:2,سنوب دوغ:2,بوبا:2,نكفو:2,أورلسان:5,إد شيران:-5"]});
+function cats(){
+ app.innerHTML='<h2>'+T("ct")+'</h2><div class="card">'+Object.keys(CATS).map(function(k){return'<label class="tog"><span>'+CI[k]+' '+cn(k)+'</span><input type="checkbox" data-k="'+k+'"'+(CATS[k]?" checked":"")+'></label>'}).join("")+'</div><p class="c" id="cm"></p><button class="btn red sm" id="bk">'+T("back")+'</button>';
+ document.querySelectorAll("input[data-k]").forEach(function(c){c.onchange=function(){CATS[c.dataset.k]=c.checked?1:0;if(!Object.keys(CATS).some(function(k){return CATS[k]})){CATS[c.dataset.k]=1;c.checked=true;$("cm").textContent=T("one")}}});
+ $("bk").onclick=home}
+function handoff(){
+ if(!G.u)G.u=[{},{}];
+ var g=G.r%2,l=1-g,q=qx(G.qs[G.r]);G.jk=null;
+ app.innerHTML='<div class="c"><p>ROUND '+(G.r+1)+'/'+G.qs.length+'</p></div><div class="card"><p class="q">'+q[0]+'</p></div><p class="c">'+T("jk")+'</p><div class="jks">'+["p","x","q"].map(function(k){return'<button data-k="'+k+'" aria-pressed="false" aria-label="Joker '+JL[k]+'"'+(G.u[g][k]?" disabled":"")+'>'+JL[k]+'</button>'}).join("")+'</div><h2 class="c">'+T("cp")+'</h2><button class="btn red" id="rd">'+T("jo")+'</button><div class="card"><p style="margin:0">'+T("hd").replace("{a}",G.n[l]).replace("{b}",G.n[g])+'</p></div>';
+ var bs=document.querySelectorAll(".jks button");
+ bs.forEach(function(b){b.onclick=function(){var on=b.getAttribute("aria-pressed")!="true";bs.forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed",on?"true":"false");G.jk=on?b.dataset.k:null}});
+ $("rd").onclick=play}
+function play(){
+ var q=qx(G.qs[G.r]),items=shuf(q[1].split(",").map(function(s){var i=s.lastIndexOf(":");return{n:s.slice(0,i),p:+s.slice(i+1),on:0}})),left=60,iv,score=0;
+ app.innerHTML='<div class="card"><p class="q">'+q[0]+'</p><div class="bar"><i id="pg"></i></div><div class="sc"><span class="tm" id="tm">60</span><span>'+T("sc")+' : <b id="sc">0</b></span></div></div><div class="list" id="ls"></div><button class="btn yel sm" id="fin">'+T("fn")+'</button>';
+ var ls=$("ls");
+ items.forEach(function(it){var b=document.createElement("button");b.className="row"+(it.p<0?" neg":"");b.setAttribute("aria-pressed","false");
+  b.innerHTML="<span>"+(it.p<0?"💣 ":"")+it.n+'</span><span class="p">'+it.p+"</span>";
+  b.onclick=function(){it.on=!it.on;b.setAttribute("aria-pressed",it.on?"true":"false");score+=it.on?it.p:-it.p;$("sc").textContent=score};ls.appendChild(b)});
+ setTimeout(function(){$("pg").style.width=(59/60*100)+"%"},50);
+ iv=setInterval(function(){left--;$("tm").textContent=left;$("pg").style.width=(left/60*100)+"%";if(left<=0)end()},1000);
+ $("fin").onclick=end;
+ function end(){clearInterval(iv);var fs=score,lab="",j=G.jk;
+  if(j){G.u[G.r%2][j]=1;var o=j;if(j=="q")o=["p","x","b"][Math.floor(Math.random()*3)];
+   var pos=items.filter(function(i){return i.on&&i.p>0}).length,bm=items.filter(function(i){return i.on&&i.p<0}).length;
+   if(o=="p"){fs=score+2*pos;lab="+2"}else if(o=="x"){fs=score*2;lab="×2"}else{fs=score+5*bm;lab="💣 0"}
+   if(j=="q")lab="? → "+lab}
+  G.pts[G.r%2]+=fs;result(items,fs,lab)}}
+function result(items,score,lab){
+ var g=G.r%2;
+ var rows=items.map(function(i){var c,t;if(i.p>0){c=i.on?"ok":"ko";t=i.on?"✓ ":"✗ "}else{c=i.on?"ko":"nt";t="💣 "}
+  return'<div class="row '+c+'"><span>'+t+i.n+'</span><span class="p">'+(i.p<0&&!i.on?T("av"):i.p)+'</span></div>'}).join("");
+ app.innerHTML='<h2 class="c">'+T("ro")+'</h2><div class="card"><div class="big">'+(score>0?"+":"")+score+' '+T("pt")+'</div><p class="c">'+T("fo")+' '+G.n[g]+(lab?" – "+T("jn")+" "+lab:"")+'</p></div><h2>'+T("rc")+'</h2><p>'+T("lg")+'</p><div class="list">'+rows+'</div><button class="btn red" id="nx">'+T("sv")+'</button>';
+ $("nx").onclick=scores;window.scrollTo(0,0)}
+function bars(m){return[0,1].map(function(i){return'<div class="pb"><div class="t"><span>'+G.n[i]+'</span><span>'+G.pts[i]+' '+T("pt")+'</span></div><div class="b"><i style="width:'+Math.max(0,G.pts[i]/m*100)+'%"></i></div></div>'}).join("")}
+function scores(){
+ var last=G.r==G.qs.length-1,m=Math.max(1,G.pts[0],G.pts[1]);
+ app.innerHTML='<h2 class="c">'+T("scT")+'</h2><div class="card">'+bars(m)+'</div><button class="btn red" id="nx">'+(last?T("sr"):T("nx"))+'</button>';
+ $("nx").onclick=function(){if(last)fin();else{G.r++;handoff()}};window.scrollTo(0,0)}
+function fin(){
+ var a=G.pts[0],b=G.pts[1],w=a==b?T("eq"):(a>b?G.n[0]:G.n[1])+" "+T("win");
+ app.innerHTML='<div class="trophy">🏆</div><h1><b>'+w+'</b></h1><div class="card">'+bars(Math.max(1,a,b))+'</div><button class="btn teal" id="again">'+T("rv")+'</button><button class="btn red" id="hm">'+T("mu")+'</button>';
+ $("again").onclick=function(){var n=G.n,pool=pick(G.qs.length);G={n:n,pts:[0,0],r:0,qs:pool,h:[],u:[{},{}]};handoff()};$("hm").onclick=home}
+</script>
+</body>
+</html>
